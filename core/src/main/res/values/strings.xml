@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">PrimeClinic</string>
+    <string name="app_enter">Вход в PrimeClinic</string>
+    <string name="app_register">Регистрация в PrimeClinic</string>
+    <string name="phone_number">Номер телефона</string>
+    <string name="password_hint">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+
+</resources>
