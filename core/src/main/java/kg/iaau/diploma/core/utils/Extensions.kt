@@ -35,3 +35,6 @@ fun View.setEnable(enabled: Boolean) {
     alpha = if (enabled) 1f else 0.5f
 }
 
+fun View.setAnimateAlpha(value: Float) {
+    animate().alpha(value)
+}

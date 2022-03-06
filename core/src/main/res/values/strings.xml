@@ -6,4 +6,7 @@
     <string name="password_hint">Пароль</string>
     <string name="action_sign_in">Войти</string>
 
+    <string name="schedule">Расписание</string>
+    <string name="chat">Чат</string>
+    <string name="client_reservation_for_today">Приемы за сегодня %s</string>
 </resources>

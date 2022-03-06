@@ -17,7 +17,7 @@ class AuthRepository(
     suspend fun auth(phone: String, password: String): AccessToken {
         val authorization = Authorization(phone, password)
         val response = apiAuth.auth(authorization)
-        saveUserId(response.userId)
+        saveUserId(response.id)
         saveToken(response.accessToken)
         saveRefreshToken(response.refreshToken)
         savePhone(phone)

@@ -17,7 +17,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
-    const val BASE_URL = "http://192.168.15.104:8080/api/v1/"
+    const val BASE_URL = "https://primegay1.herokuapp.com/api/v1/"
 
     @Singleton
     @Provides
@@ -50,5 +50,9 @@ object ApiModule {
     @Singleton
     @Provides
     fun provideApiAuth(retrofit: Retrofit): ApiAuth = retrofit.create(ApiAuth::class.java)
+
+    @Singleton
+    @Provides
+    fun provideApiSchedule(retrofit: Retrofit): ApiSchedule = retrofit.create(ApiSchedule::class.java)
 
 }

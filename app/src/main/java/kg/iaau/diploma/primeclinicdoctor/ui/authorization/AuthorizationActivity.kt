@@ -54,13 +54,13 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun observeLiveData() {
-        vm.event.observe(this, { event ->
-            when(event) {
+        vm.event.observe(this) { event ->
+            when (event) {
                 is Loading -> showLoader()
                 is Success -> successAction()
                 is Error -> errorAction(event)
             }
-        })
+        }
     }
 
     private fun successAction() {
@@ -77,11 +77,19 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun showLoader() {
-        vb.progressBar.show()
+        vb.run {
+            progressBar.show()
+            clContainer.setAnimateAlpha(0.5f)
+            btnEnter.setEnable(false)
+        }
     }
 
     private fun goneLoader() {
-        vb.progressBar.gone()
+        vb.run {
+            progressBar.gone()
+            clContainer.setAnimateAlpha(1f)
+            btnEnter.setEnable(true)
+        }
     }
 
     companion object {
