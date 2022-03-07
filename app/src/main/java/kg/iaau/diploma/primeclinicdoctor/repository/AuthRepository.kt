@@ -2,7 +2,6 @@ package kg.iaau.diploma.primeclinicdoctor.repository
 
 import kg.iaau.diploma.data.AccessToken
 import kg.iaau.diploma.data.Authorization
-import kg.iaau.diploma.data.User
 import kg.iaau.diploma.local_storage.prefs.StoragePreferences
 import kg.iaau.diploma.network.api.ApiAuth
 
@@ -12,7 +11,6 @@ class AuthRepository(
 ) {
     var token: String? = prefs.token
     var phone: String? = prefs.phone
-    var deviceId: String? = prefs.deviceId
 
     suspend fun auth(phone: String, password: String): AccessToken {
         val authorization = Authorization(phone, password)
@@ -24,13 +22,16 @@ class AuthRepository(
         return response
     }
 
-    suspend fun register(phone: String, password: String) {
-        val authorization = User(username = phone, password = password)
-        apiAuth.register(authorization)
+    fun getPin() = prefs.pin
+
+    fun savePin(pin: String) {
+        prefs.pin = pin
     }
 
-    suspend fun verify(code: String) {
-        apiAuth.verify(code)
+    fun restorePinWithTokens() {
+        prefs.token = ""
+        prefs.refreshToken = ""
+        prefs.pin = ""
     }
 
     private fun saveUserId(userId: Long?) {

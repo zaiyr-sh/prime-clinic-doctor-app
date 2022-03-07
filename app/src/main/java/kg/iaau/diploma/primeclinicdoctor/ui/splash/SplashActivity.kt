@@ -6,10 +6,10 @@ import android.os.Looper
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kg.iaau.diploma.primeclinicdoctor.MainActivity
+import kg.iaau.diploma.primeclinicdoctor.databinding.ActivitySplashBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationActivity
 import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationVM
-import kg.iaau.diploma.primeclinicdoctor.databinding.ActivitySplashBinding
+import kg.iaau.diploma.primeclinicdoctor.ui.pin.PinActivity
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class SplashActivity : AppCompatActivity() {
     private fun startActivityWithDelay() {
         Handler(Looper.getMainLooper()).postDelayed({
             if (vm.isUserSignIn())
-                MainActivity.startActivity(this)
+                PinActivity.startActivity(this)
             else
                 AuthorizationActivity.startActivity(this)
             finish()

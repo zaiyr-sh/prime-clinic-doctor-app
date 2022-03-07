@@ -1,16 +1,16 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.main.schedule
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.utils.*
+import kg.iaau.diploma.primeclinicdoctor.MainActivity
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentScheduleBinding
+import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationActivity
 
 @AndroidEntryPoint
 class ScheduleFragment : Fragment() {
@@ -23,8 +23,29 @@ class ScheduleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         vb = FragmentScheduleBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
+        (requireActivity() as? MainActivity)?.setSupportActionBar(vb.toolbar)
         vm.getSchedule()
         return vb.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.exit -> {
+                context?.showDialog(R.string.exit_confirmation, {
+                    vm.logout()
+                    activity?.finishAffinity()
+                    AuthorizationActivity.startActivity(requireContext())
+                })
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

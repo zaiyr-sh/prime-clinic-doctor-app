@@ -46,4 +46,8 @@ class ScheduleVM @Inject constructor(private val repository: ScheduleRepository)
         )
     }
 
+    fun logout() {
+        repository.restorePinWithTokens()
+    }
+
 }

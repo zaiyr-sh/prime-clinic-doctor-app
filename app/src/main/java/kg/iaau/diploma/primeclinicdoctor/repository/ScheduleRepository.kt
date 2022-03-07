@@ -19,4 +19,10 @@ class ScheduleRepository(
 
     suspend fun getScheduleFromDb() = scheduleDao.getScheduleFromDb()
 
+    fun restorePinWithTokens() {
+        prefs.token = ""
+        prefs.refreshToken = ""
+        prefs.pin = ""
+    }
+
 }

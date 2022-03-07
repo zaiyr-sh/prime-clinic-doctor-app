@@ -1,10 +1,13 @@
 package kg.iaau.diploma.core.utils
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.StringRes
+import kg.iaau.diploma.core.R
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,4 +52,23 @@ fun String.formatForCurrentDate(): String {
 fun convertToDateFormat(dayOfMonth: Int, month: Int, year: Int): String {
     val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     return sdf.format(Date(year - 1900, month, dayOfMonth))
+}
+
+fun Context.showDialog(
+    @StringRes title: Int,
+    positiveCallback: (() -> Unit)? = null,
+    negativeCallback: (() -> Unit)? = null
+) {
+    AlertDialog.Builder(this, R.style.AlertDialogTheme)
+        .setTitle(getString(title))
+        .setCancelable(false)
+        .setPositiveButton(R.string.ok) { dialog, _ ->
+            positiveCallback?.invoke()
+            dialog.cancel()
+        }
+        .setNegativeButton(R.string.cancel) { dialog, _ ->
+            negativeCallback?.invoke()
+            dialog.cancel()
+        }
+        .show()
 }

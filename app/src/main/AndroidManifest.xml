@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.pin.PinActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.authorization.AuthorizationActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar"
@@ -36,7 +39,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustNothing" />
     </application>
 
 </manifest>

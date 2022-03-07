@@ -9,8 +9,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.constants.AUTH_ERROR
 import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.core.utils.CoreEvent.*
-import kg.iaau.diploma.primeclinicdoctor.MainActivity
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityAuthorizationBinding
+import kg.iaau.diploma.primeclinicdoctor.ui.pin.PinActivity
 
 @AndroidEntryPoint
 class AuthorizationActivity : AppCompatActivity() {
@@ -65,7 +65,8 @@ class AuthorizationActivity : AppCompatActivity() {
 
     private fun successAction() {
         goneLoader()
-        MainActivity.startActivity(this)
+        PinActivity.startActivity(this)
+        finish()
     }
 
     private fun errorAction(event: Error) {
