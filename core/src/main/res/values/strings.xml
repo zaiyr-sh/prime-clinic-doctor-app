@@ -8,5 +8,8 @@
 
     <string name="schedule">Расписание</string>
     <string name="chat">Чат</string>
-    <string name="client_reservation_for_today">Приемы за сегодня %s</string>
+    <string name="client_reservation_for_date">Приемы за %s</string>
+    <string name="client_number">Пациент №%s</string>
+
+    <string name="unexpected_error">Случилась непредвиденная ошибка.</string>
 </resources>

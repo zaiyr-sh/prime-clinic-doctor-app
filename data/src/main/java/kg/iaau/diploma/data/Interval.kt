@@ -9,7 +9,7 @@ data class Interval(
     var id: Int? = null,
     var start: String? = null,
     var end: String? = null,
-    var reservation: List<Slot>? = null
+    var reservation: List<Slot> = listOf()
 )
 
 @Entity

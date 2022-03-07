@@ -3,17 +3,23 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.schedule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kg.iaau.diploma.core.utils.formatForCurrentDate
 import kg.iaau.diploma.core.vm.CoreVM
 import kg.iaau.diploma.data.Interval
+import kg.iaau.diploma.data.Slot
 import kg.iaau.diploma.primeclinicdoctor.repository.ScheduleRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleVM @Inject constructor(private val repository: ScheduleRepository) : CoreVM() {
 
-    val doctorScheduleLiveData: LiveData<List<Interval>?>
-        get() = _doctorScheduleLiveData
-    private val _doctorScheduleLiveData = MutableLiveData<List<Interval>?>()
+    val clientsLiveData: LiveData<List<Slot>>
+        get() = _clientsLiveData
+    private val _clientsLiveData = MutableLiveData<List<Slot>>()
+
+    val choosingDateLiveData: LiveData<String>
+        get() = _choosingDateLiveData
+    private val _choosingDateLiveData = MutableLiveData<String>()
 
     fun getSchedule() {
         safeLaunch(
@@ -23,10 +29,19 @@ class ScheduleVM @Inject constructor(private val repository: ScheduleRepository)
         )
     }
 
-    fun getScheduleFromDb() {
+    fun getScheduleFromDb(date: String) {
         safeLaunch(
             action = {
-                _doctorScheduleLiveData.postValue(repository.getScheduleFromDb())
+                _choosingDateLiveData.postValue(date)
+                _clientsLiveData.postValue(
+                    repository.getScheduleFromDb().filter {
+                            it.start?.formatForCurrentDate() == date
+                        }.flatMap { interval ->
+                            interval.reservation.filter { slot ->
+                                slot.id != null
+                            }
+                        }
+                )
             }
         )
     }

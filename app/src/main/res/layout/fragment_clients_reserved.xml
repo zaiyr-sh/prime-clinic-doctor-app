@@ -5,10 +5,11 @@
     android:id="@+id/cl_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.schedule.ScheduleFragment">
+    android:background="?android:windowBackground"
+    tools:context=".ui.main.schedule.reservation.ClientsReservedFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/abl_work_time"
+        android:id="@+id/abl_reserve_visit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -21,21 +22,22 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:addStatesFromChildren="false"
-            app:title="@string/schedule"
-            app:titleMarginStart="@dimen/size_16dp"
-            app:titleTextAppearance="@style/ToolbarTheme" />
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="@string/client_reservation_for_date"
+            app:titleTextAppearance="@style/ToolbarTheme">
+
+        </androidx.appcompat.widget.Toolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <CalendarView
-        android:id="@+id/calendarView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_clients"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_15dp"
-        android:outlineSpotShadowColor="@color/red"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/abl_work_time"
-        tools:targetApi="p" />
+        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/abl_reserve_visit"
+        tools:listitem="@layout/list_item_client" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -44,10 +46,21 @@
         android:layout_margin="@dimen/size_100dp"
         android:indeterminateTint="@color/red"
         android:progressTint="@color/red"
-        android:visibility="visible"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/abl_reserve_visit" />
+
+    <ImageView
+        android:id="@+id/iv_empty"
+        android:layout_width="@dimen/size_35dp"
+        android:layout_height="@dimen/size_35dp"
+        android:src="@drawable/ic_empty"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
