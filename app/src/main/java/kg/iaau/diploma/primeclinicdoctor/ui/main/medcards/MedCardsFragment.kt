@@ -5,13 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.utils.*
-import kg.iaau.diploma.data.Client
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentMedCardsBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.medcards.adapter.MedCardAdapter
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MedCardsFragment : Fragment() {
@@ -25,7 +26,6 @@ class MedCardsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         vb = FragmentMedCardsBinding.inflate(inflater, container, false)
-        vm.getMedCards()
         return vb.root
     }
 
@@ -47,8 +47,10 @@ class MedCardsFragment : Fragment() {
                 is CoreEvent.Error -> errorAction(event)
             }
         }
-        vm.medCardsLiveData.observe(viewLifecycleOwner) { medCards ->
-            setupMedCards(medCards)
+        vm.getMedCards().observe(viewLifecycleOwner) { medCards ->
+            lifecycleScope.launch {
+                adapter.submitData(medCards)
+            }
         }
     }
 
@@ -71,19 +73,6 @@ class MedCardsFragment : Fragment() {
         vb.run {
             progressBar.gone()
             clContainer.setAnimateAlpha(1f)
-        }
-    }
-
-    private fun setupMedCards(medCards: List<Client>) {
-        vb.run {
-            if(medCards.isNullOrEmpty()) {
-                rvMedCards.hide()
-                ivEmpty.show()
-            } else {
-                rvMedCards.show()
-                ivEmpty.hide()
-                adapter.submitList(medCards)
-            }
         }
     }
 

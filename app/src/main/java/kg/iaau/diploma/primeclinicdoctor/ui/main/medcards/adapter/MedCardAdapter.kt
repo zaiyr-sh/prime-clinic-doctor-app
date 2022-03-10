@@ -2,6 +2,7 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.medcards.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import kg.iaau.diploma.data.Client
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemMedCardBinding
 
-class MedCardAdapter : ListAdapter<Client, MedCardViewHolder>(DIFF_CALLBACK) {
+class MedCardAdapter : PagingDataAdapter<Client, MedCardViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MedCardViewHolder {
         return MedCardViewHolder.from(parent)
@@ -18,7 +19,7 @@ class MedCardAdapter : ListAdapter<Client, MedCardViewHolder>(DIFF_CALLBACK) {
 
     override fun onBindViewHolder(holder: MedCardViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        item?.let { holder.bind(it) }
     }
 
     companion object {
