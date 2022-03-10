@@ -11,8 +11,10 @@
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_clients_reserved.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_med_cards.xml" value="0.161231884057971" />
         <entry key="app/src/main/res/layout/fragment_schedule.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_item_client.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/list_item_med_card.xml" value="0.25" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu.xml" value="0.24322916666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1574074074074074" />
@@ -23,12 +25,15 @@
         <entry key="core/src/main/res/drawable/ic_empty.xml" value="0.11" />
         <entry key="core/src/main/res/drawable/ic_exit.xml" value="0.1225" />
         <entry key="core/src/main/res/drawable/ic_launcher_background.xml" value="0.13958333333333334" />
+        <entry key="core/src/main/res/drawable/ic_med_card.xml" value="0.1095" />
         <entry key="core/src/main/res/drawable/ic_remove.xml" value="0.1225" />
         <entry key="core/src/main/res/drawable/ic_schedule.xml" value="0.16203703703703703" />
         <entry key="core/src/main/res/drawable/rounded_button.xml" value="0.13958333333333334" />
+        <entry key="core/src/main/res/drawable/shape_age.xml" value="0.1245" />
         <entry key="core/src/main/res/drawable/shape_empty_dot.xml" value="0.1" />
         <entry key="core/src/main/res/drawable/shape_filled_dot.xml" value="0.1225" />
         <entry key="core/src/main/res/drawable/shape_keypad.xml" value="0.1225" />
+        <entry key="core/src/main/res/drawable/shape_outline.xml" value="0.1245" />
         <entry key="core/src/main/res/drawable/shape_time.xml" value="0.107" />
       </map>
     </option>

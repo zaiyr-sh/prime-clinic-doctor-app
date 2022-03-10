@@ -16,6 +16,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/nav_med_cards"
+        android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.medcards.MedCardsFragment"
+        android:label="@string/med_card"
+        tools:layout="@layout/fragment_med_cards" />
+
+    <fragment
         android:id="@+id/nav_chat"
         android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ChatFragment"
         android:label="@string/chat"

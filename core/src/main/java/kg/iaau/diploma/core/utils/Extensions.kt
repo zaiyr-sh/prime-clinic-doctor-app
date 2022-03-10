@@ -72,3 +72,9 @@ fun Context.showDialog(
         }
         .show()
 }
+
+fun String?.formatDateForMedCard(): String? {
+    if (this == null) return null
+    val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
+    return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(format)
+}

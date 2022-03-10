@@ -55,4 +55,8 @@ object ApiModule {
     @Provides
     fun provideApiSchedule(retrofit: Retrofit): ApiSchedule = retrofit.create(ApiSchedule::class.java)
 
+    @Singleton
+    @Provides
+    fun provideApiMedCard(retrofit: Retrofit): ApiMedCard = retrofit.create(ApiMedCard::class.java)
+
 }

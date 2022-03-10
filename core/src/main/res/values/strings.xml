@@ -25,10 +25,14 @@
     <string name="zero">0</string>
 
     <string name="schedule">Расписание</string>
+    <string name="med_card">Медкарта</string>
     <string name="chat">Чат</string>
     <string name="client_reservation_for_date">Приемы за %s</string>
     <string name="client_number">Пациент №%s</string>
+    <string name="medical_cards">Медицинские карты</string>
+    <string name="full_name">%s %s %s</string>
 
+    <string name="not_pointed">Не указано</string>
     <string name="exit_confirmation">Вы уверены что хотите выйти?</string>
     <string name="cancel">отмена</string>
     <string name="ok">ок</string>

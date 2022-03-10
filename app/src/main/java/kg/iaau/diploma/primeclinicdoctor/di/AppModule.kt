@@ -13,8 +13,10 @@ import kg.iaau.diploma.local_storage.db.AppDatabase
 import kg.iaau.diploma.local_storage.db.ScheduleDao
 import kg.iaau.diploma.local_storage.prefs.StoragePreferences
 import kg.iaau.diploma.network.api.ApiAuth
+import kg.iaau.diploma.network.api.ApiMedCard
 import kg.iaau.diploma.network.api.ApiSchedule
 import kg.iaau.diploma.primeclinicdoctor.repository.AuthRepository
+import kg.iaau.diploma.primeclinicdoctor.repository.MedCardsRepository
 import kg.iaau.diploma.primeclinicdoctor.repository.ScheduleRepository
 import javax.inject.Singleton
 
@@ -49,4 +51,9 @@ object AppModule {
     @Singleton
     @Provides
     fun providesScheduleRepository(storagePreferences: StoragePreferences, apiSchedule: ApiSchedule, scheduleDao: ScheduleDao) = ScheduleRepository(storagePreferences, apiSchedule, scheduleDao)
+
+    @Singleton
+    @Provides
+    fun providesMedCardsRepository(apiMedCard: ApiMedCard) = MedCardsRepository(apiMedCard)
+
 }
