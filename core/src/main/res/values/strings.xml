@@ -30,6 +30,7 @@
     <string name="client_reservation_for_date">Приемы за %s</string>
     <string name="client_number">Пациент №%s</string>
     <string name="medical_cards">Медицинские карты</string>
+    <string name="search">Поиск</string>
     <string name="full_name">%s %s %s</string>
 
     <string name="not_pointed">Не указано</string>

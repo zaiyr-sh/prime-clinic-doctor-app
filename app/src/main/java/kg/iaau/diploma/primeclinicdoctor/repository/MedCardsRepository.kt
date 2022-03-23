@@ -16,10 +16,10 @@ class MedCardsRepository(
     private val apiMedCard: ApiMedCard
 ) {
 
-    fun getMedCards(event: MutableLiveData<Event>, pagingConfig: PagingConfig = getDefaultPageConfig()): LiveData<PagingData<Client>> {
+    fun getMedCards(event: MutableLiveData<Event>, pagingConfig: PagingConfig = getDefaultPageConfig(), query: String = ""): LiveData<PagingData<Client>> {
         return Pager(
             config = pagingConfig,
-            pagingSourceFactory = { MedCardsDS(event, apiMedCard) }
+            pagingSourceFactory = { MedCardsDS(event, apiMedCard, query) }
         ).liveData
     }
 

@@ -7,6 +7,6 @@ import retrofit2.http.Query
 interface ApiMedCard {
 
     @GET("client/card")
-    suspend fun getMedCards(@Query("page") page: Int): MedCards
+    suspend fun getMedCards(@Query("page") page: Int, @Query("search") query: String): MedCards
 
 }

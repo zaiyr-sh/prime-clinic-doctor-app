@@ -1,9 +1,9 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.main.medcards
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.navGraphViewModels
@@ -29,8 +29,33 @@ class MedCardsFragment : Fragment() {
         return vb.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.search, menu)
+
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    vb.rvMedCards.scrollToPosition(0)
+                    vm.searchPhotos(query)
+                    searchView.clearFocus()
+                }
+                return true
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrEmpty()) getMedCards()
+                return true
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(vb.toolbar)
         setupFragmentView()
         observeLiveData()
     }
@@ -47,9 +72,18 @@ class MedCardsFragment : Fragment() {
                 is CoreEvent.Error -> errorAction(event)
             }
         }
+        getMedCards()
+        vm.searchedMedCards.observe(viewLifecycleOwner) { searchedMedCards ->
+            lifecycleScope.launch {
+                adapter.submitData(viewLifecycleOwner.lifecycle, searchedMedCards)
+            }
+        }
+    }
+
+    private fun getMedCards() {
         vm.getMedCards().observe(viewLifecycleOwner) { medCards ->
             lifecycleScope.launch {
-                adapter.submitData(medCards)
+                adapter.submitData(viewLifecycleOwner.lifecycle, medCards)
             }
         }
     }

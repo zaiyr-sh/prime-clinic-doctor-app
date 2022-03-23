@@ -12,7 +12,11 @@ import kg.iaau.diploma.network.api.ApiMedCard
 import retrofit2.HttpException
 import java.io.IOException
 
-class MedCardsDS(private var event: MutableLiveData<Event>, private val apiMedCard: ApiMedCard) : PagingSource<Int, Client>() {
+class MedCardsDS(
+    private var event: MutableLiveData<Event>,
+    private val apiMedCard: ApiMedCard,
+    private val query: String
+) : PagingSource<Int, Client>() {
 
     override fun getRefreshKey(state: PagingState<Int, Client>): Int? = null
 
@@ -26,7 +30,7 @@ class MedCardsDS(private var event: MutableLiveData<Event>, private val apiMedCa
         val page = params.key ?: DEFAULT_PAGE_INDEX
         return try {
             event.postValue(CoreEvent.Loading(true))
-            val response = apiMedCard.getMedCards(page).content
+            val response = apiMedCard.getMedCards(page, query).content
             event.postValue(CoreEvent.Success())
             LoadResult.Page(
                 response,
