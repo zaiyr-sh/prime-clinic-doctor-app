@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.constants.AUTH_ERROR
 import kg.iaau.diploma.core.utils.*
@@ -17,6 +18,7 @@ class AuthorizationActivity : AppCompatActivity() {
 
     private lateinit var vb: ActivityAuthorizationBinding
     private val vm: AuthorizationVM by viewModels()
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +30,7 @@ class AuthorizationActivity : AppCompatActivity() {
 
     private fun setupActivityView() {
         vb.apply {
+            ccp.registerCarrierNumberEditText(etPhone)
             btnEnter.setEnable(false)
             etPhone.addTextChangedListener { checkEditTextFilling() }
             etPassword.addTextChangedListener { checkEditTextFilling() }
@@ -47,10 +50,16 @@ class AuthorizationActivity : AppCompatActivity() {
 
     private fun editTextHandler(): Array<String> {
         vb.apply {
-            val login = etPhone.text.trim().toString()
-            val password = etPassword.text.trim().toString()
+            val login = etPhone.text.toString().filterNot { it.isWhitespace() }
+            val password = etPassword.text.toString().filterNot { it.isWhitespace() }
             return arrayOf(login, password)
         }
+    }
+
+    private fun initFirebaseAuth() {
+        mAuth = FirebaseAuth.getInstance()
+        val user = mAuth.currentUser
+        if (user == null) vm.createNewUserInFirebase(mAuth)
     }
 
     private fun observeLiveData() {
@@ -64,6 +73,7 @@ class AuthorizationActivity : AppCompatActivity() {
     }
 
     private fun successAction() {
+        initFirebaseAuth()
         goneLoader()
         PinActivity.startActivity(this)
         finish()

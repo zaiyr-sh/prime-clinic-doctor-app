@@ -12,7 +12,7 @@
         android:title="@string/med_card" />
 
     <item
-        android:id="@+id/nav_chat"
+        android:id="@+id/nav_channel"
         android:icon="@drawable/ic_chat"
         android:title="@string/chat" />
 

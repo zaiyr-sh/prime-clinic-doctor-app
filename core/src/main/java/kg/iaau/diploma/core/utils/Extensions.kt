@@ -78,3 +78,10 @@ fun String?.formatDateForMedCard(): String? {
     val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(this)
     return SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(format)
 }
+
+fun String.convertToEmail(): String = "$this@gmail.com"
+
+fun Date.formatForDate(format: String = "dd.MM.yyyy HH:mm"): String {
+    val sdf = SimpleDateFormat(format, Locale.ROOT)
+    return sdf.format(this)
+}

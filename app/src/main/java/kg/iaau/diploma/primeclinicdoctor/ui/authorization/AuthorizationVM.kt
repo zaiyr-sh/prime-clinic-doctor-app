@@ -1,5 +1,6 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.authorization
 
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kg.iaau.diploma.core.vm.CoreVM
 import kg.iaau.diploma.primeclinicdoctor.repository.AuthRepository
@@ -51,6 +52,14 @@ class AuthorizationVM @Inject constructor(private val repository: AuthRepository
 
     private fun savePhone(phone: String?) {
         repository.phone = phone
+    }
+
+    fun createNewUserInFirebase(mAuth: FirebaseAuth) {
+        repository.createNewUserInFirebase(mAuth)
+    }
+
+    fun signInFirebase() {
+        repository.signInFirebase()
     }
 
 }

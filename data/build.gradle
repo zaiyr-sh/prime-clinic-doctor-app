@@ -46,4 +46,6 @@ dependencies {
     kapt 'androidx.room:room-compiler:2.4.0'
     implementation 'androidx.room:room-common:2.4.0'
     implementation 'androidx.room:room-ktx:2.4.0'
+
+    implementation 'com.google.firebase:firebase-firestore:21.6.0'
 }

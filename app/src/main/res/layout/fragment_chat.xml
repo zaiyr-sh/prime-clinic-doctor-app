@@ -1,14 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cl_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.main.chat.ChatFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abl_chat"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="CHAT" />
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:elevation="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-</FrameLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:menu="@menu/chat_menu"
+            android:addStatesFromChildren="false"
+            app:logo="@drawable/ic_doctor"
+            app:navigationIcon="@drawable/ic_arrow_back"
+            app:title="@string/administrator"
+            app:titleMarginStart="@dimen/size_16dp"
+            app:titleTextAppearance="@style/ToolbarTheme"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsv_specialists"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/size_22dp"
+        app:layout_constraintBottom_toTopOf="@id/rl_type_messaging"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/abl_chat">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_chats"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:itemCount="7"
+                tools:listitem="@layout/list_item_sent_message" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/iv_sent_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/size_16dp"
+        android:layout_marginBottom="@dimen/size_16dp"
+        android:src="@drawable/ic_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/rl_type_messaging"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_toStartOf="@+id/iv_sent_message"
+        android:background="@drawable/shape_message_typing"
+        android:minHeight="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_sent_message"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_attach"
+            android:layout_width="@dimen/size_54dp"
+            android:layout_height="@dimen/size_54dp"
+            android:layout_marginStart="@dimen/size_16dp"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_doctor"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/et_message_typing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_attach"
+            android:layout_marginStart="@dimen/size_22dp"
+            android:layout_toStartOf="@+id/rl_attach_image"
+            android:background="@color/transparent"
+            android:hint="@string/send_message_hint"
+            android:minHeight="@dimen/size_56dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_attach_image"
+            android:layout_width="@dimen/size_42dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_attach"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/size_10dp"
+            android:minHeight="@dimen/size_56dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_attach" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminateTint="@color/red"
+        android:progressTint="@color/red"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

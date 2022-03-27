@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_message_sent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/size_150dp"
+    android:layout_marginTop="@dimen/size_16dp"
+    android:layout_marginEnd="@dimen/size_16dp"
+    android:background="@drawable/shape_sent_message">
+
+    <RelativeLayout
+        android:id="@+id/rl_message_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_150dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/size_20dp">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateTint="@color/red"
+                android:progressTint="@color/red"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_sent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:maxHeight="@dimen/size_120dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_error" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cv_image"
+            android:layout_marginStart="@dimen/size_14dp"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:layout_marginEnd="@dimen/size_14dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14sp"
+            tools:text="This is a message This is a message This is a message" />
+
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_message_body"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/size_12dp"
+        android:layout_marginEnd="@dimen/size_14dp"
+        android:layout_marginBottom="@dimen/size_4dp"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/size_12sp"
+        tools:text="12:10" />
+
+</RelativeLayout>

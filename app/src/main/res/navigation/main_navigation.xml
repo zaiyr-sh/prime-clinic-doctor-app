@@ -22,10 +22,40 @@
         tools:layout="@layout/fragment_med_cards" />
 
     <fragment
+        android:id="@+id/nav_channel"
+        android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ChannelsFragment"
+        android:label="@string/chat"
+        tools:layout="@layout/fragment_channels" >
+        <action
+            android:id="@+id/from_nav_channel_to_nav_chat"
+            app:destination="@id/nav_chat" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_chat"
         android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ChatFragment"
         android:label="@string/chat"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="path"
+            app:argType="string" />
+        <argument
+            android:name="type"
+            app:argType="string" />
+        <action
+            android:id="@+id/from_nav_chat_to_nav_image_full"
+            app:destination="@id/nav_image_full" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_image_full"
+        android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ImageFullFragment"
+        android:label="@string/photo"
+        tools:layout="@layout/fragment_image_full">
+        <argument
+            android:name="image"
+            app:argType="string" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_client_reserved"

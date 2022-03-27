@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_message_received"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/messageSentRelative"
+    android:layout_marginStart="@dimen/size_16dp"
+    android:layout_marginTop="@dimen/size_16dp"
+    android:layout_marginEnd="@dimen/size_150dp"
+    android:background="@drawable/shape_received_message">
+
+    <RelativeLayout
+        android:id="@+id/rl_message_body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_received"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cv_image"
+            android:layout_marginStart="@dimen/size_14dp"
+            android:layout_marginTop="@dimen/size_12dp"
+            android:layout_marginEnd="@dimen/size_14dp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/size_14sp"
+            tools:text="This is a message This is a message This is a message" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_image"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/size_150dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/size_20dp">
+
+            <ImageView
+                android:id="@+id/iv_received"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_error" />
+
+        </androidx.cardview.widget.CardView>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_message_body"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="@dimen/size_14dp"
+        android:layout_marginTop="@dimen/size_12dp"
+        android:layout_marginEnd="@dimen/size_14dp"
+        android:layout_marginBottom="@dimen/size_4dp"
+        android:textColor="@color/grey"
+        android:textSize="@dimen/size_12sp"
+        tools:text="12:10" />
+
+</RelativeLayout>

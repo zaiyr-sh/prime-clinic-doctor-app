@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.utils.hide
 import kg.iaau.diploma.core.utils.show
@@ -21,6 +22,7 @@ class PinActivity : AppCompatActivity() {
 
     private lateinit var vb: ActivityPinBinding
     private val vm: AuthorizationVM by viewModels()
+    private lateinit var mAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,8 +120,15 @@ class PinActivity : AppCompatActivity() {
     }
 
     private fun startMainActivity() {
+        initFirebaseAuth()
         MainActivity.startActivity(this)
         finish()
+    }
+
+    private fun initFirebaseAuth() {
+        mAuth = FirebaseAuth.getInstance()
+        val user = mAuth.currentUser
+        if (user == null) vm.signInFirebase()
     }
 
     private fun restorePinWithTokens() {

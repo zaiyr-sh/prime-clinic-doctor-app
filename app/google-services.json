@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "306116052518",
+    "firebase_url": "https://primedoc-94c30.firebaseio.com",
+    "project_id": "primedoc-94c30",
+    "storage_bucket": "primedoc-94c30.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:306116052518:android:7a7ad8ec99aa0a87e588e7",
+        "android_client_info": {
+          "package_name": "kg.iaau.diploma.primeclinicdoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "306116052518-e22ugqdgh1cf2njlc72am4jab09o4k72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZXDAfsSH9yUXzqn0nd9HZNvT0f83DbaQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "306116052518-e22ugqdgh1cf2njlc72am4jab09o4k72.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
