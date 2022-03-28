@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,18 +44,18 @@ class ChannelsFragment : Fragment(), ChannelListener {
     }
 
     private fun setupFragmentView() {
-        FirebaseAuth.getInstance().currentUser?.let { initAdminChat(it) }
+        FirebaseAuth.getInstance().currentUser?.let { initAdminChat() }
         initRV()
     }
 
-    private fun initAdminChat(user: FirebaseUser) {
+    private fun initAdminChat() {
         vb.run {
             progressBar.show()
             val db = FirebaseFirestore.getInstance()
-            val ref = db.collection("chatAdmin").document(user.uid)
+            val ref = db.collection("chatAdmin").document(vm.userId.toString())
             ref.get().addOnSuccessListener {
                 it.getString("lastMessage")?.let { lastMessage ->
-                    tvMessage.text = if (it.getString("lastMessageSenderId") == user.uid)
+                    tvMessage.text = if (it.getString("lastMessageSenderId") == vm.userId.toString())
                         getString(R.string.your_message, lastMessage)
                     else
                         getString(R.string.admin_message, lastMessage)
@@ -76,7 +75,7 @@ class ChannelsFragment : Fragment(), ChannelListener {
 
     private fun initRV() {
         val db = FirebaseFirestore.getInstance()
-        val query = db.collection("PrimeDocChat").whereEqualTo("clientId", vm.userId.toString())
+        val query = db.collection("PrimeDocChat").whereEqualTo("adminId", vm.userId.toString())
             .orderBy("lastMessageTime", Query.Direction.DESCENDING)
         val options: FirestoreRecyclerOptions<Chat> =
             FirestoreRecyclerOptions.Builder<Chat>().setQuery(query, Chat::class.java).build()
@@ -95,9 +94,10 @@ class ChannelsFragment : Fragment(), ChannelListener {
         )
     }
 
-    override fun onChannelClick(position: Int) {
+    override fun onChannelClick(position: Int, chatUserPhone: String?) {
+        vm.setChatUserPhone(chatUserPhone)
         val ref = adapter.snapshots.getSnapshot(position).reference.path
-        navigateToChat(ref, UserType.DOCTOR.name)
+        navigateToChat(ref, UserType.PATIENT.name)
     }
 
 }

@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             app:menu="@menu/chat_menu"
             android:addStatesFromChildren="false"
-            app:logo="@drawable/ic_doctor"
+            app:logo="@drawable/ic_patient"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/administrator"
             app:titleMarginStart="@dimen/size_16dp"
@@ -89,7 +89,6 @@
             android:layout_marginStart="@dimen/size_16dp"
             android:layout_marginTop="@dimen/size_12dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_doctor"
             android:visibility="gone" />
 
         <EditText

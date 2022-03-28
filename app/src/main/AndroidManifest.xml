@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.main.chat.calling.ReceivingCallActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.pin.PinActivity"
             android:exported="false" />
         <activity

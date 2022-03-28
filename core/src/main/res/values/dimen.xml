@@ -43,6 +43,7 @@
     <dimen name="size_174dp">174dp</dimen>
     <dimen name="size_180dp">180dp</dimen>
     <dimen name="size_230dp">230dp</dimen>
+    <dimen name="size_250dp">250dp</dimen>
     <dimen name="size_290dp">290dp</dimen>
     <dimen name="size_300dp">300dp</dimen>
 

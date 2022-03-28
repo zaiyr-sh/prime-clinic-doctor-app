@@ -32,15 +32,23 @@
     <string name="medical_cards">Медицинские карты</string>
     <string name="search">Поиск</string>
     <string name="full_name">%s %s %s</string>
+    <string name="name_with_patronymic">%s %s</string>
 
     <string name="administrator">Администратор</string>
+    <string name="patient">Пациент</string>
     <string name="your_message">Вы: %s</string>
-    <string name="doctor_message">Доктор: %s</string>
+    <string name="patient_message">Пациент: %s</string>
     <string name="admin_message">Админ: %s</string>
     <string name="send_message_hint">Введите сообщение…</string>
     <string name="chat_started">Чат начался, теперь вы можете задавать свои вопросы</string>
     <string name="video_call">Видеозвонок</string>
     <string name="photo">Фото</string>
+    <string name="calling">Идет звонок…</string>
+    <string name="incoming_call">Входящий звонок…</string>
+    <string name="doctor_not_available">Доктор на данный момент занят. Попробуйте позже</string>
+    <string name="call_finished">Звонок завершен</string>
+    <string name="call_accepted">Звонок принят</string>
+    <string name="call_rejected">Звонок отклонен</string>
 
     <string name="not_pointed">Не указано</string>
     <string name="exit_confirmation">Вы уверены что хотите выйти?</string>

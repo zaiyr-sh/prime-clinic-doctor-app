@@ -38,7 +38,7 @@ class ScheduleVM @Inject constructor(private val repository: ScheduleRepository)
                             it.start?.formatForCurrentDate() == date
                         }.flatMap { interval ->
                             interval.reservation.filter { slot ->
-                                slot.id != null
+                                slot.id != null && slot.paid == true
                             }
                         }
                 )

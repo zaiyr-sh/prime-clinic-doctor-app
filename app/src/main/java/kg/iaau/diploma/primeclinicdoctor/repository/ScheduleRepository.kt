@@ -11,9 +11,9 @@ class ScheduleRepository(
     private val scheduleDao: ScheduleDao
 ) {
 
-    var userId: Long? = prefs.userId
+    var id: Long? = prefs.id
 
-    suspend fun getSchedule() = apiSchedule.getScheduleByDoctorId(userId)
+    suspend fun getSchedule() = apiSchedule.getScheduleByDoctorId(id)
 
     suspend fun insertSchedule(schedule: List<Interval>) = scheduleDao.insertSchedule(schedule)
 

@@ -28,15 +28,18 @@ class ChannelAdapter(options: FirestoreRecyclerOptions<Chat>, private var listen
 
 class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.ViewHolder(vb.root) {
 
+    private lateinit var chat: Chat
+
     fun bind(chat: Chat) {
+        this.chat = chat
         vb.run {
             tvTime.text = chat.lastMessageTime?.toDate()?.formatForDate()
             tvMessage.text = when (chat.lastMessageSenderId) {
-                chat.adminId -> itemView.context.getString(R.string.doctor_message, getMessage(chat))
-                chat.clientId -> itemView.context.getString(R.string.your_message, getMessage(chat))
+                chat.clientId -> itemView.context.getString(R.string.patient_message, getMessage(chat))
+                chat.adminId -> itemView.context.getString(R.string.your_message, getMessage(chat))
                 else -> ""
             }
-            setFullName(chat.adminId)
+            tvName.text = chat.userPhone
         }
     }
 
@@ -47,30 +50,13 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
         }
     }
 
-    private fun setFullName(adminId: String?) {
-        val db = FirebaseFirestore.getInstance()
-        vb.run {
-            adminId?.let { id ->
-                db.collection("doctors").document(id).get().addOnSuccessListener {
-                    val image = it.getString("image")
-                    val name = it.getString("name")
-                    val fatherName = it.getString("fatherName")
-                    if (!image.isNullOrEmpty())
-                        Glide.with(itemView).load(image).into(ivProfile)
-                    val fullName = "$name $fatherName"
-                    tvName.text = fullName
-                }
-            }
-        }
-    }
-
     companion object {
         fun from(parent: ViewGroup, listener: ChannelListener): ChannelViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val vb = ListItemChannelBinding.inflate(layoutInflater, parent, false)
             return ChannelViewHolder(vb).apply {
                 itemView.setOnClickListener {
-                    listener.onChannelClick(bindingAdapterPosition)
+                    listener.onChannelClick(bindingAdapterPosition, chat.userPhone)
                 }
             }
         }
@@ -78,5 +64,5 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
 }
 
 interface ChannelListener {
-    fun onChannelClick(position: Int)
+    fun onChannelClick(position: Int, chatUserPhone: String?)
 }

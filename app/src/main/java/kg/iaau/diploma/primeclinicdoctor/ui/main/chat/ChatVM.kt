@@ -14,5 +14,10 @@ class ChatVM @Inject constructor(
     val userId: Long? = prefs.userId
     val id: Long? = prefs.id
 
+    var userPhone: String? = ""
+
+    fun setChatUserPhone(userPhone: String?) {
+        this.userPhone = userPhone
+    }
 
 }

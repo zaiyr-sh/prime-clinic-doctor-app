@@ -19,7 +19,7 @@ class AuthRepository(
     suspend fun auth(phone: String, password: String): AccessToken {
         val authorization = Authorization(phone, password)
         val response = apiAuth.auth(authorization)
-        saveUserId(response.id)
+        saveUserIds(response.id, response.userId)
         saveToken(response.accessToken)
         saveRefreshToken(response.refreshToken)
         savePhone(phone)
@@ -38,7 +38,8 @@ class AuthRepository(
         prefs.pin = ""
     }
 
-    private fun saveUserId(userId: Long?) {
+    private fun saveUserIds(id: Long?, userId: Long?) {
+        prefs.id = id
         prefs.userId = userId
     }
 
@@ -77,7 +78,7 @@ class AuthRepository(
             map["userType"] = "USER"
             map["userPhone"] = prefs.phone!!
             map["isOnline"] = true
-            db.collection("users").document(user.uid).set(map, SetOptions.merge())
+            db.collection("users").document(prefs.userId.toString()).set(map, SetOptions.merge())
         }
     }
 
@@ -88,7 +89,7 @@ class AuthRepository(
             val map = mutableMapOf<String, String>()
             map["userType"] = "USER"
             map["userPhone"] = prefs.phone!!
-            db.collection("users").document(user.uid).set(map)
+            db.collection("users").document(prefs.userId.toString()).set(map)
         }
     }
 

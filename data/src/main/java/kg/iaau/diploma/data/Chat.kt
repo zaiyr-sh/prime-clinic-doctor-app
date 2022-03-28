@@ -9,5 +9,6 @@ data class Chat(
     var lastMessage: String? = null,
     var lastMessageSenderId: String? = null,
     var chatStarted: Boolean? = null,
-    var lastMessageTime: Timestamp? = null
+    var lastMessageTime: Timestamp? = null,
+    var userPhone: String? = null,
 )

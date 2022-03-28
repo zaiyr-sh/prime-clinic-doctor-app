@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -44,7 +45,7 @@ class ChatFragment : Fragment(), MessageListener {
 
     private val args: ChatFragmentArgs by navArgs()
     private val ref by lazy { args.path }
-    private val type by lazy { args.type }
+    private val userType by lazy { args.type }
 
     private var docRef: DocumentReference? = null
     private lateinit var firebaseAuth: FirebaseAuth
@@ -82,20 +83,18 @@ class ChatFragment : Fragment(), MessageListener {
         savedInstanceState: Bundle?
     ): View {
         vb = FragmentChatBinding.inflate(inflater, container, false)
-        setHasOptionsMenu(true)
-        (requireActivity() as? MainActivity)?.setSupportActionBar(vb.toolbar)
         return vb.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu, menu)
+        inflater.inflate(R.menu.chat_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.video_call -> {
-                if (userId != null && canWrite && type != UserType.ADMIN.name)
+                if (userId != null && canWrite && userType != UserType.ADMIN.name)
                     makeVideoCall()
                 true
             }
@@ -118,40 +117,15 @@ class ChatFragment : Fragment(), MessageListener {
     }
 
     private fun initUser() {
-        docRef?.get()?.addOnSuccessListener {
-            val adminId = it.getString("adminId")
-            userId = adminId
-            when (type) {
-                UserType.DOCTOR.name -> getDoctorData(adminId)
-                UserType.ADMIN.name -> setHasOptionsMenu(false)
-            }
-        }
-    }
-
-    private fun getDoctorData(adminId: String?) {
-        vb.run {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("doctors").document(adminId!!).get().addOnSuccessListener {
-                val image = it.getString("image")
-                val name = it.getString("name")
-                val fatherName = it.getString("fatherName")
-                image?.let { icon ->
-                    Glide.with(requireActivity())
-                        .asBitmap()
-                        .load(icon)
-                        .into(object : CustomTarget<Bitmap>(){
-                            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {}
-                            override fun onLoadCleared(placeholder: Drawable?) {
-                                toolbar.logo = placeholder
-                            }
-                        })
-                }
-                toolbar.title = "$name $fatherName"
-            }
+        when (userType) {
+            UserType.PATIENT.name -> vb.toolbar.title = vm.userPhone
+            UserType.ADMIN.name -> setHasOptionsMenu(false)
         }
     }
 
     private fun setupFragmentView(listener: ListenerRegistration?) {
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(vb.toolbar)
         vb.run {
             toolbar.setNavigationOnClickListener {
                 if (canWrite) listener?.remove()
@@ -185,17 +159,29 @@ class ChatFragment : Fragment(), MessageListener {
             messageType = "text"
             docRef?.collection("messages")?.document()?.set(model)
                 ?.addOnCompleteListener {
-                    val map = mutableMapOf<String, Any>()
-                    map["adminId"] = "a"
-                    map["adminPhone"] = ""
-                    map["chatStarted"] = true
-                    map["clientId"] = FirebaseAuth.getInstance().currentUser?.uid.toString()
-                    map["lastMessage"] = message
-                    map["lastMessageSenderId"] = user.uid
-                    map["lastMessageTime"] = Timestamp.now()
-                    map["name"] = vm.phone ?: ""
-                    map["surname"] = "USER"
-                    docRef?.set(map, SetOptions.merge())
+                    when(userType) {
+                        UserType.PATIENT.name -> {
+                            val map = mutableMapOf<String, Any>()
+                            map["chatStarted"] = true
+                            map["lastMessage"] = message
+                            map["lastMessageSenderId"] = vm.userId.toString()
+                            map["lastMessageTime"] = Timestamp.now()
+                            docRef?.set(map, SetOptions.merge())
+                        }
+                        UserType.ADMIN.name -> {
+                            val map = mutableMapOf<String, Any>()
+                            map["adminId"] = "a"
+                            map["adminPhone"] = ""
+                            map["chatStarted"] = true
+                            map["clientId"] = FirebaseAuth.getInstance().currentUser?.uid.toString()
+                            map["lastMessage"] = message
+                            map["lastMessageSenderId"] = user.uid
+                            map["lastMessageTime"] = Timestamp.now()
+                            map["name"] = vm.phone ?: ""
+                            map["surname"] = "USER"
+                            docRef?.set(map, SetOptions.merge())
+                        }
+                    }
                 }
         }
     }
