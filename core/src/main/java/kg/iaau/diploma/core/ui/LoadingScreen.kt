@@ -35,7 +35,6 @@ object LoadingScreen {
         try {
             if (dialog != null) {
                 dialog!!.dismiss()
-                dialog = null
             }
         } catch (e: Exception) {
             e.printStackTrace()

@@ -9,8 +9,6 @@ import kg.iaau.diploma.core.utils.CoreEvent
 import kg.iaau.diploma.core.utils.Event
 import kg.iaau.diploma.data.Client
 import kg.iaau.diploma.network.api.ApiMedCard
-import retrofit2.HttpException
-import java.io.IOException
 
 class MedCardsDS(
     private var event: MutableLiveData<Event>,
@@ -37,19 +35,9 @@ class MedCardsDS(
                 prevKey = if (page == DEFAULT_PAGE_INDEX) null else page - 1,
                 nextKey = if (response.isEmpty()) null else page + 1
             )
-        } catch (exception: IOException) {
+        } catch (throwable: Throwable) {
             event.postValue(CoreEvent.Error(true, null, null, R.string.network_error))
-            return LoadResult.Error(exception)
-        } catch (exception: HttpException) {
-            event.postValue(
-                CoreEvent.Error(
-                    false,
-                    exception.code(),
-                    exception.response()?.errorBody(),
-                    R.string.network_error
-                )
-            )
-            return LoadResult.Error(exception)
+            return LoadResult.Error(throwable)
         }
     }
 }
