@@ -45,7 +45,7 @@
     <string name="photo">Фото</string>
     <string name="calling">Идет звонок…</string>
     <string name="incoming_call">Входящий звонок…</string>
-    <string name="doctor_not_available">Доктор на данный момент занят. Попробуйте позже</string>
+    <string name="patient_not_available">Пациент на данный момент занят. Попробуйте позже</string>
     <string name="call_finished">Звонок завершен</string>
     <string name="call_accepted">Звонок принят</string>
     <string name="call_rejected">Звонок отклонен</string>

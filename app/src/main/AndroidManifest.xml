@@ -18,6 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="m">
         <activity
+            android:name=".ui.main.chat.calling.VideoChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.main.chat.calling.CallingActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.main.chat.calling.ReceivingCallActivity"
             android:exported="false" />
         <activity

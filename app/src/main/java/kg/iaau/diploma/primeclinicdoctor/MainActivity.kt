@@ -7,8 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,14 +36,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            setUserOnline(user)
-            addCallListener(user)
-        }
+        setUserOnline()
+        addCallListener()
     }
 
-    private fun addCallListener(user: FirebaseUser) {
+    private fun addCallListener() {
         val ref = FirebaseFirestore.getInstance().collection("doctors").document(vm.userId.toString())
             .collection("call").document("calling")
         ref.addSnapshotListener { value, _ ->
@@ -56,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUserOnline(user: FirebaseUser) {
+    private fun setUserOnline() {
         val db = FirebaseFirestore.getInstance()
         val map = mutableMapOf<String, Any>()
         map["isOnline"] = true

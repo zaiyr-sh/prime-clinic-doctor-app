@@ -1,8 +1,6 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.main.chat
 
 import android.Manifest
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -14,9 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -29,11 +24,11 @@ import kg.iaau.diploma.core.utils.gone
 import kg.iaau.diploma.core.utils.show
 import kg.iaau.diploma.core.utils.toast
 import kg.iaau.diploma.data.Message
-import kg.iaau.diploma.primeclinicdoctor.MainActivity
+import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentChatBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter.MessageAdapter
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter.MessageListener
-import kg.iaau.diploma.primeclinicdoctor.R
+import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling.CallingActivity
 import java.util.*
 
 @AndroidEntryPoint
@@ -117,9 +112,13 @@ class ChatFragment : Fragment(), MessageListener {
     }
 
     private fun initUser() {
-        when (userType) {
-            UserType.PATIENT.name -> vb.toolbar.title = vm.userPhone
-            UserType.ADMIN.name -> setHasOptionsMenu(false)
+        docRef?.get()?.addOnSuccessListener {
+            val clientId = it.getString("clientId")
+            userId = clientId
+            when (userType) {
+                UserType.PATIENT.name -> vb.toolbar.title = vm.userPhone
+                UserType.ADMIN.name -> setHasOptionsMenu(false)
+            }
         }
     }
 
@@ -196,13 +195,11 @@ class ChatFragment : Fragment(), MessageListener {
             val observer = object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                     super.onItemRangeChanged(positionStart, itemCount)
-                    rvChats.smoothScrollToPosition(positionStart)
-                    adapter.notifyDataSetChanged()
+                    rvChats.scrollToPosition(positionStart)
                 }
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
                     super.onItemRangeInserted(positionStart, itemCount)
-                    rvChats.smoothScrollToPosition(positionStart)
-                    adapter.notifyDataSetChanged()
+                    rvChats.scrollToPosition(positionStart)
                 }
             }
             docRef!!.collection("messages").addSnapshotListener { _, _ ->
@@ -233,7 +230,7 @@ class ChatFragment : Fragment(), MessageListener {
     }
 
     private fun makeVideoCall() {
-        TODO("VIDEO CALL IMPLEMENTATION")
+        CallingActivity.startActivity(requireActivity(), userId!!)
     }
 
     override fun onImageClick(image: String?) {
