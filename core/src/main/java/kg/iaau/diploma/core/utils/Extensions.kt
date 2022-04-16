@@ -4,9 +4,17 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Animatable
+import android.net.Uri
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.annotation.StringRes
+import com.facebook.drawee.backends.pipeline.Fresco
+import com.facebook.drawee.controller.BaseControllerListener
+import com.facebook.drawee.interfaces.DraweeController
+import com.facebook.drawee.view.SimpleDraweeView
+import com.facebook.imagepipeline.image.ImageInfo
 import kg.iaau.diploma.core.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -84,4 +92,53 @@ fun String.convertToEmail(): String = "$this@gmail.com"
 fun Date.formatForDate(format: String = "dd.MM.yyyy HH:mm"): String {
     val sdf = SimpleDateFormat(format, Locale.ROOT)
     return sdf.format(this)
+}
+
+fun SimpleDraweeView.loadWithFresco(
+    uri: String?,
+    onSuccess: ((imageInfo: ImageInfo?) -> Unit)? = null,
+    onFail: ((throwable: Throwable) -> Unit)? = null
+) {
+    val controller: DraweeController = Fresco.newDraweeControllerBuilder()
+        .setUri(uri)
+        .setTapToRetryEnabled(true)
+        .setOldController(controller)
+        .setControllerListener(frescoListener(onSuccess, onFail))
+        .build()
+
+    setController(controller)
+}
+
+fun SimpleDraweeView.loadWithFresco(
+    uri: Uri?,
+    onSuccess: ((imageInfo: ImageInfo?) -> Unit)? = null,
+    onFail: ((throwable: Throwable) -> Unit)? = null
+) {
+    val controller: DraweeController = Fresco.newDraweeControllerBuilder()
+        .setUri(uri)
+        .setTapToRetryEnabled(true)
+        .setOldController(controller)
+        .setControllerListener(frescoListener(onSuccess, onFail))
+        .build()
+
+    setController(controller)
+}
+
+fun frescoListener(
+    onSuccess: ((imageInfo: ImageInfo?) -> Unit)?,
+    onFail: ((throwable: Throwable) -> Unit)?
+): BaseControllerListener<ImageInfo?> {
+    return object : BaseControllerListener<ImageInfo?>() {
+        override fun onFinalImageSet(
+            id: String?,
+            @Nullable imageInfo: ImageInfo?,
+            @Nullable animatable: Animatable?
+        ) {
+            onSuccess?.invoke(imageInfo)
+        }
+
+        override fun onFailure(id: String, throwable: Throwable) {
+            onFail?.invoke(throwable)
+        }
+    }
 }

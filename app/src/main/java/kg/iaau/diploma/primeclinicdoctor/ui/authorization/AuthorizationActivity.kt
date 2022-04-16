@@ -1,34 +1,24 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.authorization
 
 import android.content.Context
-import android.os.Bundle
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
 import androidx.core.widget.addTextChangedListener
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import kg.iaau.diploma.core.constants.AUTH_ERROR
+import kg.iaau.diploma.core.ui.CoreActivity
 import kg.iaau.diploma.core.utils.*
-import kg.iaau.diploma.core.utils.CoreEvent.*
+import kg.iaau.diploma.core.utils.CoreEvent.Error
+import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityAuthorizationBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.pin.PinActivity
 
 @AndroidEntryPoint
-class AuthorizationActivity : AppCompatActivity() {
+class AuthorizationActivity :
+    CoreActivity<ActivityAuthorizationBinding, AuthorizationVM>(AuthorizationVM::class.java) {
 
-    private lateinit var vb: ActivityAuthorizationBinding
-    private val vm: AuthorizationVM by viewModels()
-    private lateinit var mAuth: FirebaseAuth
+    override val bindingInflater: (LayoutInflater) -> ActivityAuthorizationBinding
+        get() = ActivityAuthorizationBinding::inflate
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vb = ActivityAuthorizationBinding.inflate(layoutInflater)
-        setContentView(vb.root)
-        setupActivityView()
-        observeLiveData()
-    }
-
-    private fun setupActivityView() {
+    override fun setupActivityView() {
         vb.apply {
             ccp.registerCarrierNumberEditText(etPhone)
             btnEnter.setEnable(false)
@@ -56,50 +46,36 @@ class AuthorizationActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFirebaseAuth() {
-        mAuth = FirebaseAuth.getInstance()
-        val user = mAuth.currentUser
-        if (user == null) vm.createNewUserInFirebase(mAuth)
+    override fun initFirebaseAuth() {
+        super.initFirebaseAuth()
+        vm.createNewUserInFirebase(mAuth)
     }
 
-    private fun observeLiveData() {
-        vm.event.observe(this) { event ->
-            when (event) {
-                is Loading -> showLoader()
-                is Success -> successAction()
-                is Error -> errorAction(event)
-            }
-        }
-    }
-
-    private fun successAction() {
+    override fun successAction() {
+        super.successAction()
         initFirebaseAuth()
-        goneLoader()
         PinActivity.startActivity(this)
         finish()
     }
 
-    private fun errorAction(event: Error) {
-        when (event.isNetworkError) {
-            true -> toast(event.message)
-            false -> toast(AUTH_ERROR)
-        }
-        goneLoader()
+    override fun errorAction(event: Error) {
+        super.errorAction(event)
+        if (!event.isNetworkError) toast(getString(R.string.auth_error))
     }
 
-    private fun showLoader() {
-        vb.run {
-            progressBar.show()
-            clContainer.setAnimateAlpha(0.5f)
-            btnEnter.setEnable(false)
+    override fun showLoader() {
+        super.showLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(0.5f)
+            setEnable(false)
         }
     }
 
-    private fun goneLoader() {
-        vb.run {
-            progressBar.gone()
-            clContainer.setAnimateAlpha(1f)
-            btnEnter.setEnable(true)
+    override fun goneLoader() {
+        super.goneLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(1f)
+            setEnable(true)
         }
     }
 

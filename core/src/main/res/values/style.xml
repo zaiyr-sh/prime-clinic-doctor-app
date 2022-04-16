@@ -31,6 +31,58 @@
         <item name="android:layout_width">@dimen/size_300dp</item>
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/size_14sp</item>
+        <item name="android:inputType">textCapSentences</item>
+    </style>
+
+    <style name="CustomEditTextWrapperTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/edit_text_border</item>
+    </style>
+
+    <style name="CustomEditTextTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/size_13dp</item>
+        <item name="android:paddingTop">@dimen/size_16dp</item>
+        <item name="android:paddingRight">@dimen/size_13dp</item>
+        <item name="android:paddingBottom">@dimen/size_16dp</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:cursorVisible">true</item>
+    </style>
+
+    <style name="CustomTextViewTitleTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:textSize">@dimen/size_18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="CustomClickablePrimaryTextViewTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/size_14sp</item>
+    </style>
+
+    <style name="CustomTextViewErrorTheme">
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/size_16sp</item>
+    </style>
+
+    <style name="CustomKeypadTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/shape_keypad</item>
+        <item name="android:textColor">@color/grey_dark</item>
+        <item name="android:textSize">@dimen/size_22sp</item>
     </style>
 
     <style name="ToolbarTheme">
@@ -54,6 +106,13 @@
 
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/red</item>
+    </style>
+
+    <style name="PrimaryProgressBar" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminateTint">@color/red</item>
+        <item name="android:progressTint">@color/red</item>
     </style>
 
 </resources>

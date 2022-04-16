@@ -4,30 +4,25 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kg.iaau.diploma.core.utils.*
+import kg.iaau.diploma.core.ui.CoreFragment
+import kg.iaau.diploma.core.utils.CoreEvent
+import kg.iaau.diploma.core.utils.setAnimateAlpha
+import kg.iaau.diploma.core.utils.setEnable
+import kg.iaau.diploma.core.utils.toast
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentMedCardsBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.medcards.adapter.MedCardAdapter
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MedCardsFragment : Fragment() {
+class MedCardsFragment : CoreFragment<FragmentMedCardsBinding, MedCardsVM>(MedCardsVM::class.java) {
 
-    private lateinit var vb: FragmentMedCardsBinding
-    private val vm: MedCardsVM by navGraphViewModels(R.id.main_navigation) { defaultViewModelProviderFactory }
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentMedCardsBinding
+        get() = FragmentMedCardsBinding::inflate
+
     private val adapter = MedCardAdapter()
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        vb = FragmentMedCardsBinding.inflate(inflater, container, false)
-        return vb.root
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -52,26 +47,23 @@ class MedCardsFragment : Fragment() {
         })
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        super.onCreateView(inflater, container, savedInstanceState)
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(vb.toolbar)
-        setupFragmentView()
-        observeLiveData()
+        return vb.root
     }
 
-    private fun setupFragmentView() {
+    override fun setupFragmentView() {
         vb.rvMedCards.adapter = adapter
     }
 
-    private fun observeLiveData() {
-        vm.event.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is CoreEvent.Loading -> showLoader()
-                is CoreEvent.Success -> goneLoader()
-                is CoreEvent.Error -> errorAction(event)
-            }
-        }
+    override fun observeLiveData() {
+        super.observeLiveData()
         getMedCards()
         vm.searchedMedCards.observe(viewLifecycleOwner) { searchedMedCards ->
             lifecycleScope.launch {
@@ -80,7 +72,7 @@ class MedCardsFragment : Fragment() {
         }
     }
 
-    private fun getMedCards() {
+    fun getMedCards() {
         vm.getMedCards().observe(viewLifecycleOwner) { medCards ->
             lifecycleScope.launch {
                 adapter.submitData(viewLifecycleOwner.lifecycle, medCards)
@@ -88,25 +80,24 @@ class MedCardsFragment : Fragment() {
         }
     }
 
-    private fun errorAction(event: CoreEvent.Error) {
-        when (event.isNetworkError) {
-            true -> requireActivity().toast(event.message)
-            else -> requireActivity().toast(getString(R.string.unexpected_error))
-        }
-        goneLoader()
+    override fun errorAction(event: CoreEvent.Error) {
+        super.errorAction(event)
+        if (!event.isNetworkError) requireActivity().toast(getString(R.string.unexpected_error))
     }
 
-    private fun showLoader() {
-        vb.run {
-            progressBar.show()
-            clContainer.setAnimateAlpha(0.5f)
+    override fun showLoader() {
+        super.showLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(0.5f)
+            setEnable(false)
         }
     }
 
-    private fun goneLoader() {
-        vb.run {
-            progressBar.gone()
-            clContainer.setAnimateAlpha(1f)
+    override fun goneLoader() {
+        super.goneLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(1f)
+            setEnable(true)
         }
     }
 

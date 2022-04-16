@@ -3,8 +3,8 @@ package kg.iaau.diploma.primeclinicdoctor.repository.paging
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import kg.iaau.diploma.core.R
 import kg.iaau.diploma.core.constants.DEFAULT_PAGE_INDEX
-import kg.iaau.diploma.core.constants.NETWORK_ERROR
 import kg.iaau.diploma.core.utils.CoreEvent
 import kg.iaau.diploma.core.utils.Event
 import kg.iaau.diploma.data.Client
@@ -38,7 +38,7 @@ class MedCardsDS(
                 nextKey = if (response.isEmpty()) null else page + 1
             )
         } catch (exception: IOException) {
-            event.postValue(CoreEvent.Error(true, null, null, NETWORK_ERROR))
+            event.postValue(CoreEvent.Error(true, null, null, R.string.network_error))
             return LoadResult.Error(exception)
         } catch (exception: HttpException) {
             event.postValue(
@@ -46,7 +46,7 @@ class MedCardsDS(
                     false,
                     exception.code(),
                     exception.response()?.errorBody(),
-                    exception.message.toString()
+                    R.string.network_error
                 )
             )
             return LoadResult.Error(exception)

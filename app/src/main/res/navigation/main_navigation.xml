@@ -61,6 +61,10 @@
         android:id="@+id/nav_client_reserved"
         android:name="kg.iaau.diploma.primeclinicdoctor.ui.main.schedule.reservation.ClientsReservedFragment"
         android:label="@string/client_reservation_for_date"
-        tools:layout="@layout/fragment_clients_reserved" />
+        tools:layout="@layout/fragment_clients_reserved">
+        <argument
+            android:name="date"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

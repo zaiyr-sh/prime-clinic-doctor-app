@@ -53,6 +53,7 @@
         <entry key="core/src/main/res/drawable/shape_received_message.xml" value="0.135" />
         <entry key="core/src/main/res/drawable/shape_sent_message.xml" value="0.135" />
         <entry key="core/src/main/res/drawable/shape_time.xml" value="0.107" />
+        <entry key="core/src/main/res/layout/layout_loading_screen.xml" value="0.11145833333333334" />
       </map>
     </option>
   </component>

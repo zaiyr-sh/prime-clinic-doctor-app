@@ -55,4 +55,16 @@
     <string name="cancel">отмена</string>
     <string name="ok">ок</string>
     <string name="unexpected_error">Случилась непредвиденная ошибка.</string>
+
+    <string name="please_wait">Пожалуйста, ожидайте…</string>
+    <string name="success_registration_description">Вы успешно зарегестрировались! Теперь необходиом войти в приложение.</string>
+    <string name="network_error">Сервис на данный момент недоступен! Попробуйте позже.</string>
+    <string name="auth_error">Вы ввели неверные данные! Попробуйте еще раз.</string>
+    <string name="sending_code_error">Произошла ошибка при отправке кода! Попробуйте еще раз.</string>
+    <string name="date_not_selected">Дата не выбрана!</string>
+    <string name="time_not_selected">Время не выбрано!</string>
+    <string name="reservation_visit_successfully">Визит к врачу успешно забронирован!</string>
+    <string name="reservation_visit_unsuccessfully">Визит к врачу не был успешно забронирован! Попробуйте позже.</string>
+    <string name="med_card_created_successfully">Медкарта успешно создана!</string>
+    <string name="med_card_created_unsuccessfully">Ошибка при отправки медкарты! Попробуйте еще раз.</string>
 </resources>

@@ -21,7 +21,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:addStatesFromChildren="false"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/client_reservation_for_date"
             app:titleTextAppearance="@style/ToolbarTheme">
@@ -38,19 +37,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/abl_reserve_visit"
         tools:listitem="@layout/list_item_client" />
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_100dp"
-        android:indeterminateTint="@color/red"
-        android:progressTint="@color/red"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/abl_reserve_visit" />
 
     <ImageView
         android:id="@+id/iv_empty"

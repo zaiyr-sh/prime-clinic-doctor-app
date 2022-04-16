@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:gravity="center"
     tools:context=".ui.pin.PinActivity">
 
     <ImageView
@@ -18,12 +17,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_pin"
+        style="@style/CustomTextViewTitleTheme"
+        android:gravity="center"
+        android:text="@string/pin_confirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
+    <TextView
+        android:id="@+id/tv_wrong_pin"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/size_48dp"
+        style="@style/CustomTextViewErrorTheme"
+        android:gravity="center"
+        android:paddingStart="@dimen/size_50dp"
+        android:paddingEnd="@dimen/size_50dp"
+        android:text="@string/entered_wrong_pin"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_pin" />
+
     <LinearLayout
         android:id="@+id/ll_indicator_dots"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="horizontal"
         android:paddingTop="@dimen/size_15dp"
         android:paddingBottom="@dimen/size_20dp"
         android:soundEffectsEnabled="true"
@@ -59,11 +80,7 @@
         android:id="@+id/tl_keypad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/ll_indicator_dots"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_indicator_dots">
@@ -72,102 +89,62 @@
 
             <Button
                 android:id="@+id/btn_one"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/one"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/one" />
 
             <Button
                 android:id="@+id/btn_two"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/two"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/two" />
 
             <Button
                 android:id="@+id/btn_three"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/three"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/three" />
         </TableRow>
 
         <TableRow>
 
             <Button
                 android:id="@+id/btn_four"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/four"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/four" />
 
             <Button
                 android:id="@+id/btn_five"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/five"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/five" />
 
             <Button
                 android:id="@+id/btn_six"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/six"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/six" />
         </TableRow>
 
         <TableRow>
 
             <Button
                 android:id="@+id/btn_seven"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/seven"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/seven" />
 
             <Button
                 android:id="@+id/btn_eight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/eight"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/eight" />
 
             <Button
                 android:id="@+id/btn_nine"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/nine"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/nine" />
         </TableRow>
 
         <TableRow android:gravity="end">
 
             <Button
                 android:id="@+id/btn_zero"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_keypad"
-                android:text="@string/zero"
-                android:textColor="@color/grey_dark"
-                android:textSize="@dimen/size_22sp" />
+                style="@style/CustomKeypadTheme"
+                android:text="@string/zero" />
 
             <ImageButton
                 android:id="@+id/ib_delete_number"
@@ -181,52 +158,12 @@
 
     <TextView
         android:id="@+id/tv_restore_pin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/CustomClickablePrimaryTextViewTheme"
         android:layout_marginBottom="@dimen/size_32dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:fontFamily="normal"
-        android:gravity="center"
         android:text="@string/forgot_pin"
-        android:textColor="@color/red"
-        android:textSize="@dimen/size_14sp"
-        android:textStyle="bold"
-        android:typeface="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tl_keypad" />
 
-    <TextView
-        android:id="@+id/tv_pin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/iv_logo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center"
-        android:text="@string/pin_confirm"
-        android:textSize="@dimen/size_16sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@+id/iv_logo"
-        tools:layout_editor_absoluteX="0dp" />
-
-    <TextView
-        android:id="@+id/tv_wrong_pin"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/size_48dp"
-        android:layout_below="@id/iv_logo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center"
-        android:paddingStart="@dimen/size_50dp"
-        android:paddingEnd="@dimen/size_50dp"
-        android:text="@string/entered_wrong_pin"
-        android:textColor="@color/red"
-        android:textSize="@dimen/size_16sp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_pin" />
 </androidx.constraintlayout.widget.ConstraintLayout>

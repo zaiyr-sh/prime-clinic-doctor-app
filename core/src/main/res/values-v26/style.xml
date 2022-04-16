@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Base.V21.CustomEditTextTheme" parent="CustomEditTextTheme">
+        <item name="android:importantForAutofill">no</item>
+    </style>
+
+</resources>

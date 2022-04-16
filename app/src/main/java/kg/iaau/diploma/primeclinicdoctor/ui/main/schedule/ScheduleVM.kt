@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kg.iaau.diploma.core.utils.formatForCurrentDate
 import kg.iaau.diploma.core.vm.CoreVM
-import kg.iaau.diploma.data.Interval
 import kg.iaau.diploma.data.Slot
 import kg.iaau.diploma.primeclinicdoctor.repository.ScheduleRepository
 import javax.inject.Inject

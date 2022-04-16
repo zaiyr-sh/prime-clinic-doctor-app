@@ -2,10 +2,9 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.schedule
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import dagger.hilt.android.AndroidEntryPoint
+import kg.iaau.diploma.core.ui.CoreFragment
 import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.primeclinicdoctor.MainActivity
 import kg.iaau.diploma.primeclinicdoctor.R
@@ -13,19 +12,23 @@ import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentScheduleBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationActivity
 
 @AndroidEntryPoint
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : CoreFragment<FragmentScheduleBinding, ScheduleVM>(ScheduleVM::class.java) {
 
-    private lateinit var vb: FragmentScheduleBinding
-    private val vm: ScheduleVM by navGraphViewModels(R.id.main_navigation) { defaultViewModelProviderFactory }
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentScheduleBinding
+        get() = FragmentScheduleBinding::inflate
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vm.getSchedule()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        vb = FragmentScheduleBinding.inflate(inflater, container, false)
+        super.onCreateView(inflater, container, savedInstanceState)
         setHasOptionsMenu(true)
         (requireActivity() as? MainActivity)?.setSupportActionBar(vb.toolbar)
-        vm.getSchedule()
         return vb.root
     }
 
@@ -48,53 +51,36 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupFragmentView()
-        observeLiveData()
-    }
-
-    private fun setupFragmentView() {
-        vb.calendarView.setOnDateChangeListener { view, year, month, dayOfMonth ->
-            vm.getScheduleFromDb(convertToDateFormat(dayOfMonth, month, year))
-            findNavController().navigate(R.id.nav_client_reserved)
+    override fun setupFragmentView() {
+        vb.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+            findNavController().navigate(
+                R.id.nav_client_reserved,
+                Bundle().apply {
+                    putString("date", convertToDateFormat(dayOfMonth, month, year))
+                }
+            )
         }
     }
 
-    private fun observeLiveData() {
-        vm.event.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is CoreEvent.Loading -> showLoader()
-                is CoreEvent.Success -> goneLoader()
-                is CoreEvent.Error -> errorAction(event)
-            }
+    override fun errorAction(event: CoreEvent.Error) {
+        super.errorAction(event)
+        if (!event.isNetworkError) requireActivity().toast(getString(R.string.unexpected_error))
+    }
+
+    override fun showLoader() {
+        super.showLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(0.5f)
+            setEnable(false)
         }
     }
 
-    private fun errorAction(event: CoreEvent.Error) {
-        when (event.isNetworkError) {
-            true -> requireActivity().toast(event.message)
-            else -> requireActivity().toast(getString(R.string.unexpected_error))
+    override fun goneLoader() {
+        super.goneLoader()
+        vb.clContainer.run {
+            setAnimateAlpha(1f)
+            setEnable(true)
         }
-        goneLoader()
-    }
-
-    private fun showLoader() {
-        vb.run {
-            progressBar.show()
-            clContainer.setAnimateAlpha(0.5f)
-        }
-    }
-
-    private fun goneLoader() {
-        vb.run {
-            progressBar.gone()
-            clContainer.setAnimateAlpha(1f)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
     }
 
 }

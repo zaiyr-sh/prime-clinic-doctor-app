@@ -1,13 +1,11 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.pin
 
 import android.content.Context
-import android.os.Bundle
-import androidx.activity.viewModels
+import android.view.LayoutInflater
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import kg.iaau.diploma.core.ui.CoreActivity
 import kg.iaau.diploma.core.utils.hide
 import kg.iaau.diploma.core.utils.show
 import kg.iaau.diploma.core.utils.startActivity
@@ -18,20 +16,12 @@ import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationActivity
 import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationVM
 
 @AndroidEntryPoint
-class PinActivity : AppCompatActivity() {
+class PinActivity : CoreActivity<ActivityPinBinding, AuthorizationVM>(AuthorizationVM::class.java) {
 
-    private lateinit var vb: ActivityPinBinding
-    private val vm: AuthorizationVM by viewModels()
-    private lateinit var mAuth: FirebaseAuth
+    override val bindingInflater: (LayoutInflater) -> ActivityPinBinding
+        get() = ActivityPinBinding::inflate
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vb = ActivityPinBinding.inflate(layoutInflater)
-        setContentView(vb.root)
-        setupActivityView()
-    }
-
-    private fun setupActivityView() {
+    override fun setupActivityView() {
         if (vm.isFirstTimePinCreating()) setupTvPin(R.string.pin_creation, false)
         else if (vm.isUserSignIn()) setupTvPin(R.string.pin_enter, true)
         vb.apply {
@@ -120,15 +110,9 @@ class PinActivity : AppCompatActivity() {
     }
 
     private fun startMainActivity() {
-        initFirebaseAuth()
+        vm.signInFirebase()
         MainActivity.startActivity(this)
         finish()
-    }
-
-    private fun initFirebaseAuth() {
-        mAuth = FirebaseAuth.getInstance()
-        val user = mAuth.currentUser
-        if (user == null) vm.signInFirebase()
     }
 
     private fun restorePinWithTokens() {
