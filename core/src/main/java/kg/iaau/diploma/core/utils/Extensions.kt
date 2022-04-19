@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.annotation.StringRes
+import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
 import com.facebook.drawee.interfaces.DraweeController
@@ -139,6 +140,16 @@ fun frescoListener(
 
         override fun onFailure(id: String, throwable: Throwable) {
             onFail?.invoke(throwable)
+        }
+    }
+}
+
+fun RecyclerView.scrollToLastItem() {
+    addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+        if (bottom < oldBottom) {
+            postDelayed({
+                smoothScrollToPosition(bottom)
+            }, 100)
         }
     }
 }

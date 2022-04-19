@@ -19,10 +19,7 @@ import kg.iaau.diploma.core.constants.MIMETYPE_IMAGES
 import kg.iaau.diploma.core.constants.MessageType
 import kg.iaau.diploma.core.constants.UserType
 import kg.iaau.diploma.core.ui.CoreFragment
-import kg.iaau.diploma.core.utils.FirebaseHelper
-import kg.iaau.diploma.core.utils.gone
-import kg.iaau.diploma.core.utils.show
-import kg.iaau.diploma.core.utils.toast
+import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.data.Message
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentChatBinding
@@ -46,9 +43,8 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
     private var docRef: DocumentReference? = null
     private lateinit var db: FirebaseFirestore
 
-    private var messageType: String = "text"
+    private var messageType: String = MessageType.TEXT.type
     private var userId: String? = ""
-    private var image: String = ""
     private var imgUri: Uri? = null
 
     private var pickImage: ActivityResultLauncher<String> = registerForActivityResult(
@@ -100,12 +96,10 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                 requestPickImagePermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
             ivSentMessage.setOnClickListener {
-                if (etMessageTyping.text.toString().isNotEmpty()) {
-                    if (messageType == "text")
-                        sendMessage()
-                    else
-                        uploadPhotoToCloud()
-                }
+                if (messageType == MessageType.TEXT.type)
+                    sendMessage()
+                else
+                    uploadPhotoToCloud()
             }
             etMessageTyping.requestFocus()
             setupChat()
@@ -128,13 +122,14 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
         )
     }
 
-    private fun sendMessage() {
+    private fun sendMessage(image: String? = null) {
         vb.run {
+            if (image.isNullOrEmpty() && etMessageTyping.text.toString().isEmpty()) return
             ivAttach.gone()
             val msg = etMessageTyping.text.toString()
             etMessageTyping.setText("")
-            val user = mAuth.currentUser!!
-            val message = Message(user.uid, "", msg, Timestamp.now(), messageType, image)
+            val user = mAuth.currentUser
+            val message = Message(user?.uid, "", msg, Timestamp.now(), messageType, image)
             messageType = MessageType.TEXT.type
             docRef?.collection("messages")?.document()?.set(message)
                 ?.addOnCompleteListener {
@@ -186,6 +181,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                 adapter.startListening()
                 adapter.registerAdapterDataObserver(observer)
             }
+            rvChats.scrollToLastItem()
         }
     }
 
@@ -193,8 +189,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
         showLoader()
         FirebaseHelper.uploadPhoto(imgUri!!,
             onSuccess = { url ->
-                image = url
-                sendMessage()
+                sendMessage(url)
             },
             onDefault = {
                 goneLoader()
@@ -210,7 +205,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
         findNavController().navigate(
             R.id.nav_image_full,
             Bundle().apply {
-                putString("image", image)
+                putString(MessageType.IMAGE.type, image)
             }
         )
     }
