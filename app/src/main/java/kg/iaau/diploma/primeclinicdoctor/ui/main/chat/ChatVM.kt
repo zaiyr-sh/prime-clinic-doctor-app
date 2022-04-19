@@ -7,17 +7,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatVM @Inject constructor(
-    private val prefs: StoragePreferences,
+    prefs: StoragePreferences,
 ) : CoreVM() {
 
     val phone: String? = prefs.phone
     val userId: Long? = prefs.userId
     val id: Long? = prefs.id
-
-    var userPhone: String? = ""
-
-    fun setChatUserPhone(userPhone: String?) {
-        this.userPhone = userPhone
-    }
 
 }

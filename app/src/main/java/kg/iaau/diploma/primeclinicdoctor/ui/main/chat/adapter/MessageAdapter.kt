@@ -1,22 +1,17 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter
 
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.auth.FirebaseAuth
+import kg.iaau.diploma.core.constants.MessageType
 import kg.iaau.diploma.core.utils.formatForDate
 import kg.iaau.diploma.core.utils.gone
+import kg.iaau.diploma.core.utils.loadWithFresco
 import kg.iaau.diploma.core.utils.show
 import kg.iaau.diploma.data.Message
-import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemReceivedMessageBinding
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemSentMessageBinding
 
@@ -59,46 +54,23 @@ class SentVH(private val vb: ListItemSentMessageBinding): RecyclerView.ViewHolde
     fun bind(message: Message) {
         this.message = message
         vb.run {
+            cvImage.show()
+            tvMessage.show()
             tvTime.text = message.time?.toDate()?.formatForDate()
-            tvMessage.text = message.message
+            if (message.message.isNullOrEmpty())
+                tvMessage.gone()
+            else
+                tvMessage.text = message.message
             when(message.type) {
-                "text" -> {
-                    cvImage.gone()
-                }
-                else -> {
-                    Glide.with(itemView).load(message.image)
-                        .listener(object : RequestListener<Drawable> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                progressBar.gone()
-                                cvImage.show()
-                                return false
-                            }
-
-                            override fun onResourceReady(
-                                resource: Drawable?,
-                                model: Any?,
-                                target: Target<Drawable>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                progressBar.gone()
-                                cvImage.show()
-                                return false
-                            }
-
-                        })
-                        .error(R.drawable.ic_error)
-                        .into(ivSent)
-                }
+                MessageType.TEXT.type -> cvImage.gone()
+                else -> ivSent.loadWithFresco(
+                    message.image,
+                    onSuccess = { progressBar.gone() },
+                    onFail = { progressBar.gone() }
+                )
             }
         }
     }
-
     companion object {
         fun from(parent: ViewGroup, listener: MessageListener): SentVH {
             val layoutInflater = LayoutInflater.from(parent.context)
@@ -120,16 +92,20 @@ class ReceivedVH(private val vb: ListItemReceivedMessageBinding): RecyclerView.V
     fun bind(message: Message) {
         this.message = message
         vb.run {
+            cvImage.show()
+            tvReceived.show()
             tvTime.text = message.time?.toDate()?.formatForDate()
-            tvReceived.text = message.message
+            if (message.message.isNullOrEmpty())
+                tvReceived.gone()
+            else
+                tvReceived.text = message.message
             when(message.type) {
-                "text" -> {
-                    ivReceived.gone()
-                }
-                else -> {
-                    Glide.with(itemView).load(message.image).into(ivReceived)
-                    ivReceived.show()
-                }
+                MessageType.TEXT.type -> cvImage.gone()
+                else -> ivReceived.loadWithFresco(
+                    message.image,
+                    onSuccess = { progressBar.gone() },
+                    onFail = { progressBar.gone() }
+                )
             }
         }
     }

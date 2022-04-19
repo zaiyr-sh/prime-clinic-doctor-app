@@ -32,16 +32,26 @@
             android:id="@+id/cv_image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/size_150dp"
-            android:visibility="gone"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="@dimen/size_20dp">
 
-            <ImageView
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:indeterminateTint="@color/red"
+                android:progressTint="@color/red"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/iv_received"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_error" />
+                android:adjustViewBounds="true"
+                app:actualImageScaleType="centerCrop" />
 
         </androidx.cardview.widget.CardView>
 

@@ -2,16 +2,21 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling
 
 import android.Manifest
 import android.content.Context
+import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.opentok.android.*
 import dagger.hilt.android.AndroidEntryPoint
+import kg.iaau.diploma.core.ui.BaseActivity
+import kg.iaau.diploma.core.ui.CoreActivity
+import kg.iaau.diploma.core.utils.FirebaseHelper
 import kg.iaau.diploma.core.utils.startActivity
 import kg.iaau.diploma.core.utils.toast
 import kg.iaau.diploma.primeclinicdoctor.MainActivity
@@ -19,10 +24,14 @@ import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityVideoChatBinding
 
 @AndroidEntryPoint
-class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
+class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.SessionListener,
     PublisherKit.PublisherListener {
 
-    private lateinit var vb: ActivityVideoChatBinding
+    override val bindingInflater: (LayoutInflater) -> ActivityVideoChatBinding
+        get() = ActivityVideoChatBinding::inflate
+
+    private lateinit var mp: MediaPlayer
+
     private val refPath by lazy { intent.getStringExtra(REF)!! }
     private val username by lazy { intent.getStringExtra(USERNAME)!! }
 
@@ -37,19 +46,19 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
                 mSession = Session.Builder(this, API_KEY, SESSION_ID).build()
                 mSession.setSessionListener(this)
                 mSession.connect(TOKEN)
+                playConnectingSound()
             }
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        vb = ActivityVideoChatBinding.inflate(layoutInflater)
-        setContentView(vb.root)
-        setupActivityView()
-        requestPermissions.launch(permissions)
+    private fun playConnectingSound() {
+        mp = MediaPlayer.create(this, R.raw.connecting)
+        mp.isLooping = true
+        mp.start()
     }
 
-    private fun setupActivityView() {
+    override fun setupActivityView() {
+        requestPermissions.launch(permissions)
         ref = FirebaseFirestore.getInstance().document(refPath)
         addSnapshotListener()
         vb.run {
@@ -72,11 +81,7 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
     }
 
     private fun endCall() {
-        val map = mutableMapOf<String, Any>()
-        map["accepted"] = false
-        map["declined"] = false
-        map["uid"] = ""
-        map["receiverId"] = ""
+        val map = FirebaseHelper.getCallData("", "", accepted = false, declined = false)
         ref.set(map, SetOptions.merge()).addOnSuccessListener {
             goBack()
         }
@@ -87,6 +92,7 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
         mPublisher?.destroy()
         toast(getString(R.string.call_finished))
         MainActivity.startActivity(this)
+        mp.stop()
         finish()
     }
 
@@ -103,6 +109,7 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
 
     override fun onDisconnected(p0: Session?) {
         Log.d("VideoChatActivity", "onDisconnected(): ")
+        goBack()
     }
 
     override fun onStreamReceived(p0: Session?, p1: Stream?) {
@@ -119,23 +126,37 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
         if (mSubscriber != null) {
             mSubscriber = null
             vb.flContainer.removeAllViews()
+            mp.stop()
+            goBack()
         }
     }
 
     override fun onError(p0: Session?, p1: OpentokError?) {
         Log.d("VideoChatActivity", "onError(): $p1")
+        mp.stop()
+        goBack()
     }
 
     override fun onStreamCreated(p0: PublisherKit?, p1: Stream?) {
         Log.d("VideoChatActivity", "onStreamCreated(): ")
+        mp.stop()
     }
 
     override fun onStreamDestroyed(p0: PublisherKit?, p1: Stream?) {
         Log.d("VideoChatActivity", "onStreamDestroyed(): ")
+        mp.stop()
+        goBack()
     }
 
     override fun onError(p0: PublisherKit?, p1: OpentokError?) {
         Log.d("VideoChatActivity", "onError(): ")
+        mp.stop()
+        goBack()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        goBack()
     }
 
     companion object {
@@ -144,7 +165,6 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
             "1_MX40NzQ4MzY2MX5-MTY0OTg2OTY0MzU3Nn55TVFDVmhpZHVvMGg1TnRpY0VHdEV4TTR-fg"
         private var TOKEN =
             "T1==cGFydG5lcl9pZD00NzQ4MzY2MSZzaWc9NmUxNWY3MjM2NTQ4YzM0YzlkM2Y2NTUyN2M0MzE1M2RhNDgyMjAwOTpzZXNzaW9uX2lkPTFfTVg0ME56UTRNelkyTVg1LU1UWTBPVGcyT1RZME16VTNObjU1VFZGRFZtaHBaSFZ2TUdnMVRuUnBZMFZIZEVWNFRUUi1mZyZjcmVhdGVfdGltZT0xNjQ5ODY5Njk0Jm5vbmNlPTAuMTY2OTU1ODYxOTAzMzY5MDgmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTY1MjQ2MTY5MyZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=="
-        private const val RC_VIDEO_APP_PERM = 124
 
         private val permissions = arrayOf(
             Manifest.permission.RECORD_AUDIO,

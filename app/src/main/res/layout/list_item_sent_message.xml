@@ -28,19 +28,17 @@
                 android:layout_height="match_parent"
                 android:indeterminateTint="@color/red"
                 android:progressTint="@color/red"
-                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/iv_sent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxHeight="@dimen/size_120dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_error" />
+                android:adjustViewBounds="true"
+                app:actualImageScaleType="centerCrop" />
 
         </androidx.cardview.widget.CardView>
 
@@ -58,7 +56,6 @@
 
 
     </RelativeLayout>
-
 
     <TextView
         android:id="@+id/tv_time"

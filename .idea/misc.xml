@@ -18,7 +18,7 @@
         <entry key="app/src/main/res/layout/fragment_image_full.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/fragment_med_cards.xml" value="0.161231884057971" />
         <entry key="app/src/main/res/layout/fragment_schedule.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/list_item_channel.xml" value="0.16168478260869565" />
+        <entry key="app/src/main/res/layout/list_item_channel.xml" value="0.335" />
         <entry key="app/src/main/res/layout/list_item_client.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_item_med_card.xml" value="0.25" />
         <entry key="app/src/main/res/layout/list_item_received_message.xml" value="0.14447463768115942" />

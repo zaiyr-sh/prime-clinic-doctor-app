@@ -1,11 +1,9 @@
 package kg.iaau.diploma.core.utils
 
-import android.content.Intent
 import android.net.Uri
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.*
 import com.google.firebase.storage.FirebaseStorage
-import kg.iaau.diploma.core.constants.UserType
 import java.util.*
 
 object FirebaseHelper {
@@ -46,7 +44,7 @@ object FirebaseHelper {
 
     inline fun <reified T> createChannels(userId: String): FirestoreRecyclerOptions<T> {
         val db = FirebaseFirestore.getInstance()
-        val query = db.collection("PrimeDocChat").whereEqualTo("clientId", userId)
+        val query = db.collection("PrimeDocChat").whereEqualTo("adminId", userId)
             .orderBy("lastMessageTime", Query.Direction.DESCENDING)
         return FirestoreRecyclerOptions.Builder<T>().setQuery(query, T::class.java).build()
     }
@@ -56,17 +54,17 @@ object FirebaseHelper {
         listener: ((adminId: String?) -> Unit)? = null
     ) {
         docRef?.get()?.addOnSuccessListener {
-            val adminId = it.getString("adminId")
+            val adminId = it.getString("clientId")
             listener?.invoke(adminId)
         }
     }
 
-    fun setupDoctorData(
+    fun setupPatientData(
         userId: String?,
         doctorChatListener: ((doc: DocumentSnapshot) -> Unit)?
     ) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("doctors").document(userId!!).get().addOnSuccessListener {
+        db.collection("users").document(userId!!).get().addOnSuccessListener {
             doctorChatListener?.invoke(it)
         }
     }
@@ -118,7 +116,7 @@ object FirebaseHelper {
     ) {
         val db = FirebaseFirestore.getInstance()
         val ref =
-            db.collection("doctors").document(userId).collection("call").document("calling")
+            db.collection("users").document(userId).collection("call").document("calling")
         ref.get().addOnSuccessListener {
             when (it.exists() && !it.getString("uid").isNullOrEmpty()) {
                 true -> onFail?.invoke(ref)

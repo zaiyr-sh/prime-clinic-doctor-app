@@ -27,7 +27,7 @@ inline fun <reified T : Activity> Context.startActivity(noinline extra: Intent.(
 
 fun String.convertPhoneNumberTo(countryCode: String): String = "+$countryCode$this"
 
-fun Context.toast(message: String, duration: Int = Toast.LENGTH_LONG) {
+fun Context.toast(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 

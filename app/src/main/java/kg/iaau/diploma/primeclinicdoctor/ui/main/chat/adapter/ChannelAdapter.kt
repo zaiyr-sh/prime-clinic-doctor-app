@@ -3,10 +3,8 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.FirebaseFirestore
 import kg.iaau.diploma.core.utils.formatForDate
 import kg.iaau.diploma.data.Chat
 import kg.iaau.diploma.primeclinicdoctor.R

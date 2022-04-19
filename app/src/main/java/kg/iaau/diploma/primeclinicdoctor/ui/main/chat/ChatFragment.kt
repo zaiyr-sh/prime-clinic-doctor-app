@@ -7,19 +7,19 @@ import android.view.*
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.constants.MIMETYPE_IMAGES
+import kg.iaau.diploma.core.constants.MessageType
 import kg.iaau.diploma.core.constants.UserType
+import kg.iaau.diploma.core.ui.CoreFragment
+import kg.iaau.diploma.core.utils.FirebaseHelper
 import kg.iaau.diploma.core.utils.gone
 import kg.iaau.diploma.core.utils.show
 import kg.iaau.diploma.core.utils.toast
@@ -29,24 +29,23 @@ import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentChatBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter.MessageAdapter
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.adapter.MessageListener
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling.CallingActivity
-import java.util.*
 
 @AndroidEntryPoint
-class ChatFragment : Fragment(), MessageListener {
+class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.java), MessageListener {
 
-    private lateinit var vb: FragmentChatBinding
+    override val bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> FragmentChatBinding
+        get() = FragmentChatBinding::inflate
+
     private lateinit var adapter: MessageAdapter
-    private val vm: ChatVM by navGraphViewModels(R.id.main_navigation) { defaultViewModelProviderFactory }
 
     private val args: ChatFragmentArgs by navArgs()
     private val ref by lazy { args.path }
     private val userType by lazy { args.type }
+    private val username by lazy { args.username }
 
     private var docRef: DocumentReference? = null
-    private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
-    private var canWrite: Boolean = false
     private var messageType: String = "text"
     private var userId: String? = ""
     private var image: String = ""
@@ -59,7 +58,7 @@ class ChatFragment : Fragment(), MessageListener {
                 ivAttach.setImageURI(uri)
                 ivAttach.show()
                 imgUri = uri
-                messageType = "image"
+                messageType = MessageType.IMAGE.type
             }
         }
     }
@@ -73,14 +72,6 @@ class ChatFragment : Fragment(), MessageListener {
         requireActivity().toast(getString(R.string.chat_started))
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        vb = FragmentChatBinding.inflate(inflater, container, false)
-        return vb.root
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.chat_menu, menu)
@@ -89,7 +80,7 @@ class ChatFragment : Fragment(), MessageListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.video_call -> {
-                if (userId != null && canWrite && userType != UserType.ADMIN.name)
+                if (userId != null && userType != UserType.ADMIN.name)
                     makeVideoCall()
                 true
             }
@@ -97,37 +88,12 @@ class ChatFragment : Fragment(), MessageListener {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        firebaseAuth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
-        docRef = ref.let { db.document(it) }
-
-        initUser()
-
-        val listener = docRef?.addSnapshotListener { snapshot, _ ->
-            if (snapshot?.getBoolean("chatStarted") == true) canWrite = true
-        }
-        setupFragmentView(listener)
-    }
-
-    private fun initUser() {
-        docRef?.get()?.addOnSuccessListener {
-            val clientId = it.getString("clientId")
-            userId = clientId
-            when (userType) {
-                UserType.PATIENT.name -> vb.toolbar.title = vm.userPhone
-                UserType.ADMIN.name -> setHasOptionsMenu(false)
-            }
-        }
-    }
-
-    private fun setupFragmentView(listener: ListenerRegistration?) {
+    override fun setupFragmentView() {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(vb.toolbar)
+        setupChatWithFirebase()
         vb.run {
             toolbar.setNavigationOnClickListener {
-                if (canWrite) listener?.remove()
                 parentFragmentManager.popBackStack()
             }
             rlAttachImage.setOnClickListener {
@@ -142,56 +108,68 @@ class ChatFragment : Fragment(), MessageListener {
                 }
             }
             etMessageTyping.requestFocus()
-            val user = firebaseAuth.currentUser
-            if (user != null)
-                setupRV()
+            setupChat()
         }
+    }
+
+    private fun setupChatWithFirebase() {
+        initFirebaseAuth()
+        db = FirebaseFirestore.getInstance()
+        docRef = ref.let { db.document(it) }
+        FirebaseHelper.setupUserType(
+            docRef,
+            listener = { id ->
+                userId = id
+                when (userType) {
+                    UserType.PATIENT.name ->  vb.toolbar.title = username
+                    UserType.ADMIN.name -> setHasOptionsMenu(false)
+                }
+            }
+        )
     }
 
     private fun sendMessage() {
         vb.run {
             ivAttach.gone()
-            val message = etMessageTyping.text.toString()
+            val msg = etMessageTyping.text.toString()
             etMessageTyping.setText("")
-            val user = firebaseAuth.currentUser!!
-            val model = Message(user.uid, "", message, Timestamp.now(), messageType, image)
-            messageType = "text"
-            docRef?.collection("messages")?.document()?.set(model)
+            val user = mAuth.currentUser!!
+            val message = Message(user.uid, "", msg, Timestamp.now(), messageType, image)
+            messageType = MessageType.TEXT.type
+            docRef?.collection("messages")?.document()?.set(message)
                 ?.addOnCompleteListener {
                     when(userType) {
-                        UserType.PATIENT.name -> {
-                            val map = mutableMapOf<String, Any>()
-                            map["chatStarted"] = true
-                            map["lastMessage"] = message
-                            map["lastMessageSenderId"] = vm.userId.toString()
-                            map["lastMessageTime"] = Timestamp.now()
-                            docRef?.set(map, SetOptions.merge())
-                        }
-                        UserType.ADMIN.name -> {
-                            val map = mutableMapOf<String, Any>()
-                            map["adminId"] = "a"
-                            map["adminPhone"] = ""
-                            map["chatStarted"] = true
-                            map["clientId"] = FirebaseAuth.getInstance().currentUser?.uid.toString()
-                            map["lastMessage"] = message
-                            map["lastMessageSenderId"] = user.uid
-                            map["lastMessageTime"] = Timestamp.now()
-                            map["name"] = vm.phone ?: ""
-                            map["surname"] = "USER"
-                            docRef?.set(map, SetOptions.merge())
-                        }
+                        UserType.PATIENT.name -> sendMessageToPatient(msg)
+                        UserType.ADMIN.name -> sendMessageToAdmin(msg)
                     }
                 }
         }
     }
 
-    private fun setupRV() {
+    private fun sendMessageToPatient(msg: String) {
+        val map = mutableMapOf<String, Any>()
+        map["lastMessage"] = msg
+        map["lastMessageSenderId"] = vm.userId.toString()
+        map["lastMessageTime"] = Timestamp.now()
+        docRef?.set(map, SetOptions.merge())
+    }
+
+    private fun sendMessageToAdmin(msg: String) {
+        val map = mutableMapOf<String, Any>()
+        map["adminId"] = "a"
+        map["adminPhone"] = ""
+        map["clientId"] = vm.userId.toString()
+        map["lastMessage"] = msg
+        map["lastMessageSenderId"] = vm.userId.toString()
+        map["lastMessageTime"] = Timestamp.now()
+        map["name"] = vm.phone ?: ""
+        map["surname"] = "USER"
+        docRef?.set(map, SetOptions.merge())
+    }
+
+    private fun setupChat() {
         vb.run {
             rvChats.setHasFixedSize(true)
-            val query = docRef!!.collection("messages").orderBy("time", Query.Direction.ASCENDING)
-            val options: FirestoreRecyclerOptions<Message> =
-                FirestoreRecyclerOptions.Builder<Message>().setQuery(query, Message::class.java)
-                    .build()
             val observer = object : RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
                     super.onItemRangeChanged(positionStart, itemCount)
@@ -202,7 +180,7 @@ class ChatFragment : Fragment(), MessageListener {
                     rvChats.scrollToPosition(positionStart)
                 }
             }
-            docRef!!.collection("messages").addSnapshotListener { _, _ ->
+            FirebaseHelper.setupChat<Message>(docRef!!) { options ->
                 adapter = MessageAdapter(options, this@ChatFragment)
                 rvChats.adapter = adapter
                 adapter.startListening()
@@ -212,21 +190,16 @@ class ChatFragment : Fragment(), MessageListener {
     }
 
     private fun uploadPhotoToCloud() {
-        vb.progressBar.show()
-        val user = firebaseAuth.currentUser
-        if (user != null) {
-            val ref = FirebaseStorage.getInstance().getReference("images/" + Date().time + ".jpg")
-            ref.putFile(imgUri!!).addOnSuccessListener {
-                ref.downloadUrl.addOnSuccessListener {
-                    val url = it.toString()
-                    if (url.isNotEmpty()) {
-                        image = url
-                        sendMessage()
-                    }
-                    vb.progressBar.gone()
-                }
+        showLoader()
+        FirebaseHelper.uploadPhoto(imgUri!!,
+            onSuccess = { url ->
+                image = url
+                sendMessage()
+            },
+            onDefault = {
+                goneLoader()
             }
-        }
+        )
     }
 
     private fun makeVideoCall() {

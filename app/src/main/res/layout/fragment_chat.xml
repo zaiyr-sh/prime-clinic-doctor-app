@@ -21,34 +21,36 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/chat_menu"
-            android:addStatesFromChildren="false"
-            app:logo="@drawable/ic_patient"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/administrator"
             app:titleMarginStart="@dimen/size_16dp"
-            app:titleTextAppearance="@style/ToolbarTheme"/>
+            app:titleTextAppearance="@style/ToolbarTheme">
+
+            <ImageView
+                android:id="@+id/toolbar_logo"
+                android:layout_width="@dimen/size_50dp"
+                android:layout_height="@dimen/size_50dp"
+                android:layout_gravity="end"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_patient" />
+
+        </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/size_22dp"
-            app:layout_constraintBottom_toTopOf="@id/rl_type_messaging"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/abl_chat"
-            android:orientation="vertical">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_chats"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="7"
-                tools:listitem="@layout/list_item_sent_message" />
-
-        </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chats"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="7"
+        tools:listitem="@layout/list_item_sent_message"
+        android:layout_marginBottom="@dimen/size_16dp"
+        app:layout_constraintBottom_toTopOf="@id/rl_type_messaging"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/abl_chat"/>
 
     <ImageView
         android:id="@+id/iv_sent_message"
