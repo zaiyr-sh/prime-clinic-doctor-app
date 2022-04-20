@@ -15,7 +15,8 @@ object FirebaseHelper {
             if (value != null && value.exists()) {
                 value.getString("uid")?.let {
                     val uid = value.getString("uid")
-                    if (uid != null && uid != "") listener?.invoke(uid)
+                    val accepted = value.getBoolean("accepted")
+                    if (!uid.isNullOrEmpty() && accepted == false) listener?.invoke(uid)
                 }
             }
         }

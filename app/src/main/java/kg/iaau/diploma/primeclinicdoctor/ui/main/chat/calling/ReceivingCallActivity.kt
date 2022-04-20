@@ -2,10 +2,7 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,9 +49,9 @@ class ReceivingCallActivity : CoreActivity<ActivityReceivingCallBinding, ChatVM>
                     this["accepted"] = true
                 }
                 ref.set(map, SetOptions.merge()).addOnSuccessListener {
-                    VideoChatActivity.startActivity(this@ReceivingCallActivity, ref.path, tvUsername.text.toString())
                     mp.stop()
                     finish()
+                    VideoChatActivity.startActivity(this@ReceivingCallActivity, ref.path, tvUsername.text.toString())
                 }
             }
             givCancel.setOnClickListener {

@@ -1,16 +1,9 @@
 package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling
 
 import android.content.Context
-import android.content.Intent
 import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.LayoutInflater
-import androidx.activity.viewModels
-import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.ui.CoreActivity
@@ -80,9 +73,9 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
             ref,
             onSuccess = {
                 toast(getString(R.string.call_accepted))
-                VideoChatActivity.startActivity(this, ref.path, vb.tvUsername.text.toString())
                 mp.stop()
                 finish()
+                VideoChatActivity.startActivity(this, ref.path, vb.tvUsername.text.toString())
             },
             onFail = {
                 toast(getString(R.string.call_rejected))

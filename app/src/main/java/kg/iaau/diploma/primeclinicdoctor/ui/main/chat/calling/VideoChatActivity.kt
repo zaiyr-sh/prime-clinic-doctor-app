@@ -4,8 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,7 +13,6 @@ import com.google.firebase.firestore.SetOptions
 import com.opentok.android.*
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.ui.BaseActivity
-import kg.iaau.diploma.core.ui.CoreActivity
 import kg.iaau.diploma.core.utils.FirebaseHelper
 import kg.iaau.diploma.core.utils.startActivity
 import kg.iaau.diploma.core.utils.toast
@@ -41,14 +38,13 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
     private var mSubscriber: Subscriber? = null
 
     private var requestPermissions = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-        permissions.entries.forEach {
-            if (it.value) {
-                mSession = Session.Builder(this, API_KEY, SESSION_ID).build()
-                mSession.setSessionListener(this)
-                mSession.connect(TOKEN)
-                playConnectingSound()
-            }
-        }
+        val allPermitted = permissions.entries.all { it.value }
+        if (allPermitted) {
+            mSession = Session.Builder(this, API_KEY, SESSION_ID).build()
+            mSession.setSessionListener(this)
+            mSession.connect(TOKEN)
+            playConnectingSound()
+        } else finish()
     }
 
     private fun playConnectingSound() {
@@ -74,7 +70,7 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
             if (value != null && value.exists()) {
                 val uid = value.getString("uid")
                 if (uid.isNullOrEmpty()) {
-                    goBack()
+                    endCall()
                 }
             }
         }
@@ -91,8 +87,8 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
         mSubscriber?.destroy()
         mPublisher?.destroy()
         toast(getString(R.string.call_finished))
-        MainActivity.startActivity(this)
         mp.stop()
+        MainActivity.startActivity(this)
         finish()
     }
 
@@ -109,7 +105,7 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
 
     override fun onDisconnected(p0: Session?) {
         Log.d("VideoChatActivity", "onDisconnected(): ")
-        goBack()
+        endCall()
     }
 
     override fun onStreamReceived(p0: Session?, p1: Stream?) {
@@ -127,14 +123,14 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
             mSubscriber = null
             vb.flContainer.removeAllViews()
             mp.stop()
-            goBack()
+            endCall()
         }
     }
 
     override fun onError(p0: Session?, p1: OpentokError?) {
         Log.d("VideoChatActivity", "onError(): $p1")
         mp.stop()
-        goBack()
+        endCall()
     }
 
     override fun onStreamCreated(p0: PublisherKit?, p1: Stream?) {
@@ -145,18 +141,18 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
     override fun onStreamDestroyed(p0: PublisherKit?, p1: Stream?) {
         Log.d("VideoChatActivity", "onStreamDestroyed(): ")
         mp.stop()
-        goBack()
+        endCall()
     }
 
     override fun onError(p0: PublisherKit?, p1: OpentokError?) {
         Log.d("VideoChatActivity", "onError(): ")
         mp.stop()
-        goBack()
+        endCall()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        goBack()
+        endCall()
     }
 
     companion object {

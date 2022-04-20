@@ -7,10 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.ui.CoreFragment
-import kg.iaau.diploma.core.utils.CoreEvent
-import kg.iaau.diploma.core.utils.setAnimateAlpha
-import kg.iaau.diploma.core.utils.setEnable
-import kg.iaau.diploma.core.utils.toast
+import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.FragmentMedCardsBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.medcards.adapter.MedCardAdapter
