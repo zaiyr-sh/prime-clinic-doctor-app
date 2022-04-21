@@ -55,8 +55,8 @@ class ReceivingCallActivity : CoreActivity<ActivityReceivingCallBinding, ChatVM>
                 }
             }
             givCancel.setOnClickListener {
-                val map = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
-                ref.set(map, SetOptions.merge()).addOnSuccessListener {
+                val callData = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
+                ref.set(callData, SetOptions.merge()).addOnSuccessListener {
                     mp.stop()
                     finish()
                 }
