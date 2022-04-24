@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
+import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -22,11 +24,10 @@ import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityVideoChatBinding
 
 @AndroidEntryPoint
-class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.SessionListener,
+class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
     PublisherKit.PublisherListener {
 
-    override val bindingInflater: (LayoutInflater) -> ActivityVideoChatBinding
-        get() = ActivityVideoChatBinding::inflate
+    private lateinit var vb: ActivityVideoChatBinding
 
     private lateinit var mp: MediaPlayer
 
@@ -54,7 +55,14 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
         mp.start()
     }
 
-    override fun setupActivityView() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        vb = ActivityVideoChatBinding.inflate(layoutInflater)
+        setContentView(vb.root)
+        setupActivityView()
+    }
+
+    private fun setupActivityView() {
         requestPermissions.launch(permissions)
         ref = FirebaseFirestore.getInstance().document(refPath)
         addSnapshotListener()
@@ -89,7 +97,6 @@ class VideoChatActivity : BaseActivity<ActivityVideoChatBinding>(), Session.Sess
         mSubscriber?.destroy()
         mPublisher?.destroy()
         toast(getString(R.string.call_finished))
-        MainActivity.startActivity(this)
         finish()
     }
 

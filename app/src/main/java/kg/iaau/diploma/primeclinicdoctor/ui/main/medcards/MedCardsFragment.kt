@@ -34,6 +34,7 @@ class MedCardsFragment : CoreFragment<FragmentMedCardsBinding, MedCardsVM>(MedCa
                     vb.rvMedCards.scrollToPosition(0)
                     vm.searchPhotos(query)
                     searchView.clearFocus()
+                    observeSearchMedCardsLiveData()
                 }
                 return true
             }
@@ -42,6 +43,14 @@ class MedCardsFragment : CoreFragment<FragmentMedCardsBinding, MedCardsVM>(MedCa
                 return true
             }
         })
+    }
+
+    fun observeSearchMedCardsLiveData() {
+        vm.searchedMedCards.observe(viewLifecycleOwner) { searchedMedCards ->
+            lifecycleScope.launch {
+                adapter.submitData(viewLifecycleOwner.lifecycle, searchedMedCards)
+            }
+        }
     }
 
     override fun onCreateView(
@@ -62,11 +71,6 @@ class MedCardsFragment : CoreFragment<FragmentMedCardsBinding, MedCardsVM>(MedCa
     override fun observeLiveData() {
         super.observeLiveData()
         getMedCards()
-        vm.searchedMedCards.observe(viewLifecycleOwner) { searchedMedCards ->
-            lifecycleScope.launch {
-                adapter.submitData(viewLifecycleOwner.lifecycle, searchedMedCards)
-            }
-        }
     }
 
     fun getMedCards() {

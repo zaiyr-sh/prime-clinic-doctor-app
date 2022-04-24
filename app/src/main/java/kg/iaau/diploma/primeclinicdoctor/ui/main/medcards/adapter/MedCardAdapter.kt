@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kg.iaau.diploma.core.utils.formatDateForMedCard
+import kg.iaau.diploma.core.utils.loadBase64Image
 import kg.iaau.diploma.data.Client
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemMedCardBinding
@@ -46,6 +47,7 @@ class MedCardViewHolder(private val vb: ListItemMedCardBinding) : RecyclerView.V
             )
             tvPhone.text = client.username ?: itemView.resources.getString(R.string.not_pointed)
             tvAge.text = client.birthDate.formatDateForMedCard() ?: itemView.resources.getString(R.string.not_pointed)
+            ivProfile.loadBase64Image(itemView.context, client.image, R.drawable.shape_filled_dot)
         }
     }
 

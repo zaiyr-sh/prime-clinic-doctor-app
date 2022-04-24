@@ -30,6 +30,7 @@
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1574074074074074" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.13958333333333334" />
         <entry key="core/src/main/res/drawable/edittext_border.xml" value="0.13958333333333334" />
+        <entry key="core/src/main/res/drawable/ic_admin.xml" value="0.177" />
         <entry key="core/src/main/res/drawable/ic_arrow_back.xml" value="0.117" />
         <entry key="core/src/main/res/drawable/ic_attach.xml" value="0.135" />
         <entry key="core/src/main/res/drawable/ic_chat.xml" value="0.1675" />

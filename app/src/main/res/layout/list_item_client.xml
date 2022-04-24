@@ -34,13 +34,14 @@
         android:id="@+id/ll_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_8dp"
+        android:layout_marginVertical="@dimen/size_8dp"
         android:layout_marginStart="@dimen/size_8dp"
         android:background="@drawable/shape_time"
         android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/view">
 
         <TextView
             android:id="@+id/tv_time"
@@ -58,6 +59,7 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"

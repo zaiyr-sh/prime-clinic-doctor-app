@@ -4,12 +4,21 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Base64
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.controller.BaseControllerListener
@@ -19,6 +28,7 @@ import com.facebook.imagepipeline.image.ImageInfo
 import kg.iaau.diploma.core.R
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 inline fun <reified T : Activity> Context.startActivity(noinline extra: Intent.() -> Unit = {}) {
     val intent = Intent(this, T::class.java)
@@ -150,6 +160,32 @@ fun RecyclerView.scrollToLastItem() {
             postDelayed({
                 smoothScrollToPosition(bottom)
             }, 100)
+        }
+    }
+}
+
+fun Context.setDrawable(@DrawableRes id: Int): Drawable? {
+    return ContextCompat.getDrawable(this, id)
+}
+
+fun ImageView.loadBase64Image(context: Context, image: String?, @DrawableRes defaultResId: Int) {
+    if (image.isNullOrEmpty())
+        setImageDrawable(context.setDrawable(defaultResId))
+    else
+        setImageDrawable(image.convertBase64ToDrawable(context, defaultResId))
+}
+
+fun String.convertBase64ToBitmap(): Bitmap {
+    val imageAsBytes = Base64.decode(toByteArray(), Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size)
+}
+
+fun String.convertBase64ToDrawable(context: Context, @DrawableRes defaultResId: Int): Drawable? {
+    return when(isNullOrEmpty()) {
+        true -> context.setDrawable(defaultResId)
+        else -> {
+            val bitmap = this.convertBase64ToBitmap()
+            BitmapDrawable(context.resources, bitmap)
         }
     }
 }
