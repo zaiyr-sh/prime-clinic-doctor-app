@@ -22,6 +22,7 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
         get() = ActivityCallingBinding::inflate
 
     private lateinit var mp: MediaPlayer
+    private lateinit var ref: DocumentReference
 
     private val userId by lazy { intent.getStringExtra(USER_ID)!! }
     private var listener: ListenerRegistration? = null
@@ -45,10 +46,11 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
     private fun makePhoneCall() {
         FirebaseHelper.makeCall(userId,
             onSuccess = { ref ->
+                this.ref = ref
                 val callData = FirebaseHelper.getCallData(vm.userId.toString(), userId, accepted = false, declined = false)
                 ref.set(callData, SetOptions.merge()).addOnSuccessListener {
-                    addSnapListener(ref)
-                    setEndCall(ref)
+                    addSnapListener()
+                    setEndCall()
                 }
             },
             onFail = {
@@ -59,17 +61,13 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
         )
     }
 
-    private fun setEndCall(ref: DocumentReference) {
+    private fun setEndCall() {
         vb.givCancel.setOnClickListener {
-            val callData = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
-            ref.set(callData, SetOptions.merge()).addOnSuccessListener {
-                toast(getString(R.string.call_finished))
-                finish()
-            }
+            endCall()
         }
     }
 
-    private fun addSnapListener(ref: DocumentReference) {
+    private fun addSnapListener() {
         listener = FirebaseHelper.addCallAcceptanceListener(
             ref,
             onSuccess = {
@@ -86,6 +84,20 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
                 finish()
             }
         )
+    }
+
+    private fun endCall() {
+        val callData = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
+        ref.set(callData, SetOptions.merge()).addOnSuccessListener {
+            toast(getString(R.string.call_finished))
+            ref.delete()
+            finish()
+        }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        endCall()
     }
 
     companion object {

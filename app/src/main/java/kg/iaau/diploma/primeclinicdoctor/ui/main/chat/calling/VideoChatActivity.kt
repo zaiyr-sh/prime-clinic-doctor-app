@@ -7,7 +7,6 @@ import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.DocumentReference
@@ -15,11 +14,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.opentok.android.*
 import dagger.hilt.android.AndroidEntryPoint
-import kg.iaau.diploma.core.ui.BaseActivity
 import kg.iaau.diploma.core.utils.FirebaseHelper
 import kg.iaau.diploma.core.utils.startActivity
 import kg.iaau.diploma.core.utils.toast
-import kg.iaau.diploma.primeclinicdoctor.MainActivity
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityVideoChatBinding
 
@@ -148,6 +145,11 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
 
     override fun onError(p0: PublisherKit?, p1: OpentokError?) {
         Log.d("VideoChatActivity", "onError(): ")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        endCall()
     }
 
     companion object {

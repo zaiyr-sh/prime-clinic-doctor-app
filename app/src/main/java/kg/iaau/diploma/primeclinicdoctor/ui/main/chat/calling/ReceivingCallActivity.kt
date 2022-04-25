@@ -3,6 +3,7 @@ package kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling
 import android.content.Context
 import android.media.MediaPlayer
 import android.view.LayoutInflater
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,6 +22,7 @@ class ReceivingCallActivity : CoreActivity<ActivityReceivingCallBinding, ChatVM>
         get() = ActivityReceivingCallBinding::inflate
 
     private lateinit var mp: MediaPlayer
+    private lateinit var ref: DocumentReference
 
     private val userUid by lazy { intent.getStringExtra(USER_UID)!! }
 
@@ -41,7 +43,7 @@ class ReceivingCallActivity : CoreActivity<ActivityReceivingCallBinding, ChatVM>
     }
 
     private fun setupActivityViewListeners() {
-        val ref = FirebaseFirestore.getInstance().collection("doctors").document(vm.userId.toString())
+        ref = FirebaseFirestore.getInstance().collection("doctors").document(vm.userId.toString())
             .collection("call").document("calling")
         vb.run {
             givAccept.setOnClickListener {
@@ -55,14 +57,19 @@ class ReceivingCallActivity : CoreActivity<ActivityReceivingCallBinding, ChatVM>
                 }
             }
             givCancel.setOnClickListener {
-                val callData = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
-                ref.set(callData, SetOptions.merge()).addOnSuccessListener {
-                    mp.stop()
-                    finish()
-                }
+                endCall()
             }
         }
         addCallListener()
+    }
+
+    private fun endCall() {
+        val map = FirebaseHelper.getCallData("", "", accepted = false, declined = true)
+        ref.set(map, SetOptions.merge()).addOnSuccessListener {
+            mp.stop()
+            ref.delete()
+            finish()
+        }
     }
 
     private fun addCallListener() {
