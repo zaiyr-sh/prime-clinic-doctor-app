@@ -41,7 +41,7 @@
             android:name=".ui.authorization.AuthorizationActivity"
             android:exported="false"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".ui.splash.SplashActivity"
             android:exported="true"

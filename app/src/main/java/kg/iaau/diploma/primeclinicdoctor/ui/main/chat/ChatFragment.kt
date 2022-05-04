@@ -85,6 +85,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
     }
 
     override fun setupFragmentView() {
+        showLoader()
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(vb.toolbar)
         setupChatWithFirebase()
@@ -102,7 +103,6 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                     uploadPhotoToCloud()
             }
             etMessageTyping.requestFocus()
-            setupChat()
         }
     }
 
@@ -118,6 +118,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                     UserType.PATIENT.name ->  vb.toolbar.title = username
                     UserType.ADMIN.name -> setHasOptionsMenu(false)
                 }
+                setupChatMessages()
             }
         )
     }
@@ -162,7 +163,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
         docRef?.set(map, SetOptions.merge())
     }
 
-    private fun setupChat() {
+    private fun setupChatMessages() {
         vb.run {
             rvChats.setHasFixedSize(true)
             val observer = object : RecyclerView.AdapterDataObserver() {
@@ -180,6 +181,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                 rvChats.adapter = adapter
                 adapter.startListening()
                 adapter.registerAdapterDataObserver(observer)
+                goneLoader()
             }
             rvChats.scrollToLastItem()
         }
@@ -208,6 +210,11 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                 putString(MessageType.IMAGE.type, image)
             }
         )
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        docRef = null
     }
 
 }
