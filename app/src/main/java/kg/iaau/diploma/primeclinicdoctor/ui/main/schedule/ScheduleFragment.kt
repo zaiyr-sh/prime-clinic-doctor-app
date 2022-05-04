@@ -52,13 +52,16 @@ class ScheduleFragment : CoreFragment<FragmentScheduleBinding, ScheduleVM>(Sched
     }
 
     override fun setupFragmentView() {
-        vb.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            findNavController().navigate(
-                R.id.nav_client_reserved,
-                Bundle().apply {
-                    putString("date", convertToDateFormat(dayOfMonth, month, year))
-                }
-            )
+        vb.run {
+            calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                findNavController().navigate(
+                    R.id.nav_client_reserved,
+                    Bundle().apply {
+                        putString("date", convertToDateFormat(dayOfMonth, month, year))
+                    }
+                )
+            }
+            swipeToRefresh.setOnRefreshListener {  vm.getSchedule() }
         }
     }
 
@@ -68,7 +71,8 @@ class ScheduleFragment : CoreFragment<FragmentScheduleBinding, ScheduleVM>(Sched
     }
 
     override fun showLoader() {
-        super.showLoader()
+        if(!vb.swipeToRefresh.isRefreshing)
+            super.showLoader()
         vb.clContainer.run {
             setAnimateAlpha(0.5f)
             setEnable(false)
@@ -77,9 +81,12 @@ class ScheduleFragment : CoreFragment<FragmentScheduleBinding, ScheduleVM>(Sched
 
     override fun goneLoader() {
         super.goneLoader()
-        vb.clContainer.run {
-            setAnimateAlpha(1f)
-            setEnable(true)
+        with(vb) {
+            clContainer.run {
+                setAnimateAlpha(1f)
+                setEnable(true)
+            }
+            swipeToRefresh.isRefreshing = false
         }
     }
 

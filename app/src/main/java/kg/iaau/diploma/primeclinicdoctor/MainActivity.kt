@@ -10,8 +10,10 @@ import kg.iaau.diploma.core.ui.CoreActivity
 import kg.iaau.diploma.core.utils.FirebaseHelper
 import kg.iaau.diploma.core.utils.startActivity
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityMainBinding
+import kg.iaau.diploma.primeclinicdoctor.ui.authorization.AuthorizationActivity
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ChatVM
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.calling.ReceivingCallActivity
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class MainActivity : CoreActivity<ActivityMainBinding, ChatVM>(ChatVM::class.java) {
@@ -27,6 +29,18 @@ class MainActivity : CoreActivity<ActivityMainBinding, ChatVM>(ChatVM::class.jav
         FirebaseHelper.setUserOnline(vm.userId.toString())
         FirebaseHelper.addCallListener(vm.userId.toString()) { uid ->
             ReceivingCallActivity.startActivity(this, uid)
+        }
+    }
+
+    override fun observeLiveData() {
+        vm.getTokenUpdatingNotifyFlow().onEach { updated ->
+            updated?.let {
+                if (!it) {
+                    vm.logout()
+                    finishAffinity()
+                    AuthorizationActivity.startActivity(this)
+                }
+            }
         }
     }
 

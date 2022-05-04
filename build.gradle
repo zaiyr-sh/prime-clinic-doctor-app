@@ -38,7 +38,8 @@ buildscript {
                     'paging-runtime-ktx'       : "androidx.paging:paging-runtime-ktx:$vers.paging_version",
                     'lifecycle-runtime-ktx'    : "androidx.lifecycle:lifecycle-runtime-ktx:$vers.lifecycle_livedata_version",
                     'lifecycle-viewmodel-ktx'  : "androidx.lifecycle:lifecycle-viewmodel-ktx:$vers.lifecycle_livedata_version",
-                    'lifecycle-livedata-ktx'   : "androidx.lifecycle:lifecycle-livedata-ktx:$vers.lifecycle_livedata_version"
+                    'lifecycle-livedata-ktx'   : "androidx.lifecycle:lifecycle-livedata-ktx:$vers.lifecycle_livedata_version",
+                    'swiperefreshlayout'      : 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
 
             ],
             'google' : [

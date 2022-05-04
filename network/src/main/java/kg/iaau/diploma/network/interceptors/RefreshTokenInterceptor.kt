@@ -51,11 +51,11 @@ class RefreshTokenInterceptor(private val prefs: StoragePreferences) : Intercept
             Refresh(accessToken = prefs.token, refreshToken = prefs.refreshToken, username = prefs.phone)
         )
 
-        val accessToken = callAccessToken.execute().body()
+        val execution = callAccessToken.execute()
 
         // Save to prefs new access and refresh token
-        prefs.token = accessToken?.accessToken ?: ""
-        prefs.refreshToken = accessToken?.refreshToken ?: ""
-
+        prefs.token = execution.body()?.accessToken ?: ""
+        prefs.refreshToken = execution.body()?.refreshToken ?: ""
+        prefs.isTokenUpdated = execution.isSuccessful
     }
 }

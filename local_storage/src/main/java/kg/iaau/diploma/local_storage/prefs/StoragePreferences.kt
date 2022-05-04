@@ -11,6 +11,7 @@ class StoragePreferences(context: Context) : BasePrefs(context) {
     var userId: Long? by PrefDelegate(sharedPreference, Keys.USER_ID, 0)
     var token: String? by PrefDelegate(sharedPreference, Keys.ACCESS_TOKEN, "")
     var refreshToken: String? by PrefDelegate(sharedPreference, Keys.REFRESH_TOKEN, "")
+    var isTokenUpdated: Boolean? by PrefDelegate(sharedPreference, Keys.IS_TOKEN_UPDATED, true)
     var phone: String? by PrefDelegate(sharedPreference, Keys.PHONE, "")
     var pin: String? by PrefDelegate(sharedPreference, Keys.PIN, "")
 
@@ -19,6 +20,7 @@ class StoragePreferences(context: Context) : BasePrefs(context) {
         const val USER_ID = "USER_ID"
         const val ACCESS_TOKEN = "ACCESS_TOKEN"
         const val REFRESH_TOKEN = "REFRESH_TOKEN"
+        const val IS_TOKEN_UPDATED = "IS_TOKEN_UPDATED"
         const val PHONE = "PHONE"
         const val PIN = "PIN"
     }
