@@ -60,10 +60,8 @@
 
         <TextView
             android:id="@+id/tv_age"
-            android:paddingTop="@dimen/size_10dp"
-            android:paddingBottom="@dimen/size_10dp"
-            android:paddingLeft="@dimen/size_20dp"
-            android:paddingRight="@dimen/size_20dp"
+            android:paddingHorizontal="@dimen/size_20dp"
+            android:paddingVertical="@dimen/size_10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="26 лет"

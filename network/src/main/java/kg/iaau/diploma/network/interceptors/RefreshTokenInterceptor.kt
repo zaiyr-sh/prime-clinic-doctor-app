@@ -10,6 +10,9 @@ class RefreshTokenInterceptor(private val prefs: StoragePreferences) : Intercept
 
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
 
+        // set isTokenExpired by default value
+        prefs.isTokenExpired = false
+
         val request = chain.request()
         // Make a request and save the response here
         val response = chain.proceed(request)
@@ -56,6 +59,6 @@ class RefreshTokenInterceptor(private val prefs: StoragePreferences) : Intercept
         // Save to prefs new access and refresh token
         prefs.token = execution.body()?.accessToken ?: ""
         prefs.refreshToken = execution.body()?.refreshToken ?: ""
-        prefs.isTokenUpdated = execution.isSuccessful
+        prefs.isTokenExpired = !execution.isSuccessful
     }
 }

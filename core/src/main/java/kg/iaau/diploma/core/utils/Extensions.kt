@@ -169,7 +169,7 @@ fun Context.setDrawable(@DrawableRes id: Int): Drawable? {
 }
 
 fun ImageView.loadBase64Image(context: Context, image: String?, @DrawableRes defaultResId: Int) {
-    if (image.isNullOrEmpty())
+    if (image.isNullOrEmpty() || image.isNullOrBlank())
         setImageDrawable(context.setDrawable(defaultResId))
     else
         setImageDrawable(image.convertBase64ToDrawable(context, defaultResId))

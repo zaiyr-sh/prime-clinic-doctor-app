@@ -22,23 +22,23 @@ class AuthorizationActivity :
         vb.apply {
             ccp.registerCarrierNumberEditText(etPhone)
             btnEnter.setEnable(false)
-            etPhone.addTextChangedListener { checkEditTextFilling() }
-            etPassword.addTextChangedListener { checkEditTextFilling() }
+            etPhone.addTextChangedListener { validateFields() }
+            etPassword.addTextChangedListener { validateFields() }
             btnEnter.setOnClickListener { auth() }
         }
     }
 
-    private fun checkEditTextFilling() {
-        val (login, password) = editTextHandler()
+    private fun validateFields() {
+        val (login, password) = filterFields()
         vb.btnEnter.setEnable(login.isNotEmpty() && password.isNotEmpty())
     }
 
     private fun auth() {
-        val (login, password) = editTextHandler()
+        val (login, password) = filterFields()
         vm.auth(login.convertPhoneNumberTo(vb.ccp.selectedCountryCode), password)
     }
 
-    private fun editTextHandler(): Array<String> {
+    private fun filterFields(): Array<String> {
         vb.apply {
             val login = etPhone.text.toString().filterNot { it.isWhitespace() }
             val password = etPassword.text.toString().filterNot { it.isWhitespace() }

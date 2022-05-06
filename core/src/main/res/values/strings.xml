@@ -56,6 +56,7 @@
     <string name="ok">ок</string>
     <string name="unexpected_error">Случилась непредвиденная ошибка.</string>
 
+    <string name="session_timed_out">Время сессии истекло! Необходимо заново войти.</string>
     <string name="please_wait">Пожалуйста, ожидайте…</string>
     <string name="success_registration_description">Вы успешно зарегестрировались! Теперь необходиом войти в приложение.</string>
     <string name="network_error">Сервис на данный момент недоступен! Попробуйте позже.</string>

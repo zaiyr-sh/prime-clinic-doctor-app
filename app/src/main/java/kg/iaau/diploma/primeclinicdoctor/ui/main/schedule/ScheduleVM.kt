@@ -6,11 +6,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kg.iaau.diploma.core.utils.formatForCurrentDate
 import kg.iaau.diploma.core.vm.CoreVM
 import kg.iaau.diploma.data.Slot
+import kg.iaau.diploma.primeclinicdoctor.repository.AuthRepository
 import kg.iaau.diploma.primeclinicdoctor.repository.ScheduleRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleVM @Inject constructor(private val repository: ScheduleRepository) : CoreVM() {
+class ScheduleVM @Inject constructor(
+    private val repository: ScheduleRepository,
+    private val authRepository: AuthRepository
+) : CoreVM() {
 
     val clientsLiveData: LiveData<List<Slot>>
         get() = _clientsLiveData
@@ -33,9 +37,9 @@ class ScheduleVM @Inject constructor(private val repository: ScheduleRepository)
             action = {
                 _choosingDateLiveData.postValue(date)
                 _clientsLiveData.postValue(
-                    repository.getScheduleFromDb().filter {
-                            it.start?.formatForCurrentDate() == date
-                        }.flatMap { interval ->
+                    repository.getScheduleFromDb()
+                        .filter { it.start?.formatForCurrentDate() == date }
+                        .flatMap { interval ->
                             interval.reservation.filter { slot ->
                                 slot.id != null && slot.paid == true
                             }
@@ -46,7 +50,7 @@ class ScheduleVM @Inject constructor(private val repository: ScheduleRepository)
     }
 
     fun logout() {
-        repository.restorePinWithTokens()
+        authRepository.restorePinWithTokens()
     }
 
 }

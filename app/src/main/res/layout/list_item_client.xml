@@ -45,10 +45,8 @@
 
         <TextView
             android:id="@+id/tv_time"
-            android:paddingTop="@dimen/size_10dp"
-            android:paddingBottom="@dimen/size_10dp"
-            android:paddingLeft="@dimen/size_17dp"
-            android:paddingRight="@dimen/size_17dp"
+            android:paddingVertical="@dimen/size_10dp"
+            android:paddingHorizontal="@dimen/size_17dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -61,7 +59,7 @@
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="@dimen/size_1dp"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="@dimen/size_12dp"
         android:background="@color/grey_light"

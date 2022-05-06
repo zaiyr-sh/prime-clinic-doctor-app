@@ -6,7 +6,7 @@ import kg.iaau.diploma.local_storage.prefs.StoragePreferences
 import kg.iaau.diploma.network.api.ApiSchedule
 
 class ScheduleRepository(
-    private val prefs: StoragePreferences,
+    prefs: StoragePreferences,
     private val apiSchedule: ApiSchedule,
     private val scheduleDao: ScheduleDao
 ) {
@@ -18,11 +18,5 @@ class ScheduleRepository(
     suspend fun insertSchedule(schedule: List<Interval>) = scheduleDao.insertSchedule(schedule)
 
     suspend fun getScheduleFromDb() = scheduleDao.getScheduleFromDb()
-
-    fun restorePinWithTokens() {
-        prefs.token = ""
-        prefs.refreshToken = ""
-        prefs.pin = ""
-    }
 
 }

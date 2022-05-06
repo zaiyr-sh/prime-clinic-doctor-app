@@ -10,7 +10,7 @@ import kg.iaau.diploma.core.R
 
 object LoadingScreen {
 
-    var dialog: Dialog? = null
+    private var dialog: Dialog? = null
 
     // context(parent (reference))
     fun showLoading(context: Context?, cancelable: Boolean = false, text: String? = null) {

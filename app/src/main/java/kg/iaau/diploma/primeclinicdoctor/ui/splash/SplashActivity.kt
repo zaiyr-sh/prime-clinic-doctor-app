@@ -13,8 +13,8 @@ import kg.iaau.diploma.primeclinicdoctor.ui.pin.PinActivity
 @AndroidEntryPoint
 class SplashActivity : CoreActivity<ActivitySplashBinding, AuthorizationVM>(AuthorizationVM::class.java) {
 
-    override val bindingInflater: (LayoutInflater) -> ActivitySplashBinding =
-        ActivitySplashBinding::inflate
+    override val bindingInflater: (LayoutInflater) -> ActivitySplashBinding
+        get() = ActivitySplashBinding::inflate
 
     override fun setupActivityView() {
         Handler(Looper.getMainLooper()).postDelayed({

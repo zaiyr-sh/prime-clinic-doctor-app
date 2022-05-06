@@ -13,6 +13,7 @@
         android:layout_width="@dimen/size_50dp"
         android:layout_height="@dimen/size_50dp"
         android:background="@drawable/shape_outline"
+        android:scaleType="centerCrop"
         android:src="@drawable/ic_patient"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

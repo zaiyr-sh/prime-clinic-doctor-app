@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import kg.iaau.diploma.core.utils.formatForDate
+import kg.iaau.diploma.core.utils.loadBase64Image
 import kg.iaau.diploma.data.Chat
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemChannelBinding
@@ -38,6 +40,7 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
                 else -> ""
             }
             tvName.text = chat.userPhone
+            setupUserImage(chat.clientId)
         }
     }
 
@@ -45,6 +48,14 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
         return chat.lastMessage?.let { message ->
             if(message.length > 15) message.take(15) + "..."
             else message
+        }
+    }
+
+    private fun setupUserImage(clientId: String?) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users").document(clientId ?: "").get().addOnSuccessListener {
+            val image = it.getString("image")
+            vb.ivProfile.loadBase64Image(itemView.context, image, R.drawable.ic_patient)
         }
     }
 

@@ -37,6 +37,7 @@ dependencies {
 
     implementation libs.room.values()
     implementation libs.gson
+    implementation libs.androidx.values()
 
     testImplementation libs.test.values()
 

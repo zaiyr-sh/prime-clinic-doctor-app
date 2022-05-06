@@ -32,9 +32,7 @@ class ClientsReservedFragment : CoreFragment<FragmentClientsReservedBinding, Sch
 
     override fun setupFragmentView() {
         vb.run {
-            toolbar.setNavigationOnClickListener {
-                findNavController().popBackStack()
-            }
+            toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
             rvClients.adapter = adapter
         }
     }
@@ -49,18 +47,24 @@ class ClientsReservedFragment : CoreFragment<FragmentClientsReservedBinding, Sch
     }
 
     private fun setupClients(clients: List<Slot>) {
+        when(clients.isNullOrEmpty()) {
+            true -> hideClients()
+            else -> showClients(clients)
+        }
+    }
+
+    private fun hideClients() {
         vb.run {
-            when(clients.isNullOrEmpty()) {
-                true -> {
-                    rvClients.hide()
-                    ivEmpty.show()
-                }
-                else -> {
-                    adapter.submitList(clients)
-                    rvClients.show()
-                    ivEmpty.hide()
-                }
-            }
+            rvClients.hide()
+            ivEmpty.show()
+        }
+    }
+
+    private fun showClients(clients: List<Slot>) {
+        vb.run {
+            adapter.submitList(clients)
+            rvClients.show()
+            ivEmpty.hide()
         }
     }
 

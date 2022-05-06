@@ -27,7 +27,7 @@ class ImageFullFragment : BaseFragment<FragmentImageFullBinding>() {
                 image,
                 onSuccess = { goneLoader() },
                 onFail = {
-                    ivAvatar.setImageResource(kg.iaau.diploma.core.R.drawable.ic_error)
+                    ivAvatar.setImageResource(kg.iaau.diploma.core.R.drawable.ic_empty)
                     goneLoader()
                 }
             )

@@ -54,15 +54,19 @@ class ScheduleFragment : CoreFragment<FragmentScheduleBinding, ScheduleVM>(Sched
     override fun setupFragmentView() {
         vb.run {
             calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-                findNavController().navigate(
-                    R.id.nav_client_reserved,
-                    Bundle().apply {
-                        putString("date", convertToDateFormat(dayOfMonth, month, year))
-                    }
-                )
+                navigateToClientReserved(dayOfMonth, month, year)
             }
             swipeToRefresh.setOnRefreshListener {  vm.getSchedule() }
         }
+    }
+
+    private fun navigateToClientReserved(dayOfMonth: Int, month: Int, year: Int) {
+        findNavController().navigate(
+            R.id.nav_client_reserved,
+            Bundle().apply {
+                putString("date", convertToDateFormat(dayOfMonth, month, year))
+            }
+        )
     }
 
     override fun errorAction(event: CoreEvent.Error) {
