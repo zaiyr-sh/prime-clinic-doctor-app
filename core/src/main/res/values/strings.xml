@@ -31,6 +31,7 @@
     <string name="client_number">Пациент №%s</string>
     <string name="medical_cards">Медицинские карты</string>
     <string name="search">Поиск</string>
+    <string name="search_by_phone_number">Поиск по номеру телефона</string>
     <string name="full_name">%s %s %s</string>
     <string name="name_with_patronymic">%s %s</string>
 
