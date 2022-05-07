@@ -35,7 +35,7 @@ class AuthorizationActivity :
 
     private fun auth() {
         val (login, password) = filterFields()
-        vm.auth(login.convertPhoneNumberTo(vb.ccp.selectedCountryCode), password)
+        vm.auth("++${login.convertPhoneNumberTo(vb.ccp.selectedCountryCode)}", password)
     }
 
     private fun filterFields(): Array<String> {

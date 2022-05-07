@@ -6,12 +6,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
-import kg.iaau.diploma.core.utils.formatForDate
-import kg.iaau.diploma.core.utils.isFullyEmpty
-import kg.iaau.diploma.core.utils.loadBase64Image
+import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.data.Chat
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ListItemChannelBinding
+import java.util.*
 
 class ChannelAdapter(options: FirestoreRecyclerOptions<Chat>, private var listener: ChannelListener) :
     FirestoreRecyclerAdapter<Chat, ChannelViewHolder>(options) {
@@ -33,6 +32,7 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
 
     fun bind(chat: Chat) {
         vb.run {
+            setupChannelVisibility(chat)
             tvTime.text = chat.lastMessageTime?.toDate()?.formatForDate()
             tvMessage.text = when (chat.lastMessageSenderId) {
                 chat.clientId -> itemView.context.getString(R.string.patient_message, getMessage(chat))
@@ -40,6 +40,15 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
                 else -> ""
             }
             setupUser(chat.clientId)
+        }
+    }
+
+    private fun setupChannelVisibility(chat: Chat) {
+        val chatStartedDate = chat.chatStartedTime?.toDate()
+        val currentDate = Date()
+        when(chatStartedDate == null) {
+            true -> vb.clContainer.setVisible(false)
+            else -> vb.clContainer.setVisible(currentDate.remainFromInDays(chatStartedDate) <= 1)
         }
     }
 

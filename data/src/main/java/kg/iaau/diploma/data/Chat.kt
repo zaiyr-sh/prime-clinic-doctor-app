@@ -11,4 +11,5 @@ data class Chat(
     var chatStarted: Boolean? = null,
     var lastMessageTime: Timestamp? = null,
     var userPhone: String? = null,
+    var chatStartedTime: Timestamp? = null
 )
