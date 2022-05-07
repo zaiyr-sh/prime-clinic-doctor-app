@@ -46,11 +46,6 @@ class AuthorizationActivity :
         }
     }
 
-    override fun initFirebaseAuth() {
-        super.initFirebaseAuth()
-        vm.createNewUserInFirebase(mAuth)
-    }
-
     override fun successAction() {
         super.successAction()
         initFirebaseAuth()

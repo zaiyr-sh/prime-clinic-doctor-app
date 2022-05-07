@@ -27,7 +27,6 @@ class MedCardsFragment : CoreFragment<FragmentMedCardsBinding, MedCardsVM>(MedCa
 
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
-        searchView.queryHint = getString(R.string.search_by_phone_number)
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {

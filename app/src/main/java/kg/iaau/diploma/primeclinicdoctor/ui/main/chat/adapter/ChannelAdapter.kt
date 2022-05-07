@@ -7,6 +7,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import kg.iaau.diploma.core.utils.formatForDate
+import kg.iaau.diploma.core.utils.isFullyEmpty
 import kg.iaau.diploma.core.utils.loadBase64Image
 import kg.iaau.diploma.data.Chat
 import kg.iaau.diploma.primeclinicdoctor.R
@@ -28,10 +29,9 @@ class ChannelAdapter(options: FirestoreRecyclerOptions<Chat>, private var listen
 
 class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.ViewHolder(vb.root) {
 
-    private lateinit var chat: Chat
+    private var fullName: String = ""
 
     fun bind(chat: Chat) {
-        this.chat = chat
         vb.run {
             tvTime.text = chat.lastMessageTime?.toDate()?.formatForDate()
             tvMessage.text = when (chat.lastMessageSenderId) {
@@ -39,8 +39,7 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
                 chat.adminId -> itemView.context.getString(R.string.your_message, getMessage(chat))
                 else -> ""
             }
-            tvName.text = chat.userPhone
-            setupUserImage(chat.clientId)
+            setupUser(chat.clientId)
         }
     }
 
@@ -51,11 +50,25 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
         }
     }
 
-    private fun setupUserImage(clientId: String?) {
+    private fun setupUser(clientId: String?) {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(clientId ?: "").get().addOnSuccessListener {
             val image = it.getString("image")
-            vb.ivProfile.loadBase64Image(itemView.context, image, R.drawable.ic_patient)
+            val name = it.getString("name")
+            val surname = it.getString("surname")
+            val patronymic = it.getString("patronymic")
+            setupFullName(name, surname, patronymic)
+            vb.run {
+                tvName.text = fullName
+                ivProfile.loadBase64Image(itemView.context, image, R.drawable.ic_patient)
+            }
+        }
+    }
+
+    private fun setupFullName(name: String?, surname: String?, patronymic: String?) {
+        fullName = when(name.isFullyEmpty() || surname.isFullyEmpty()) {
+            true -> itemView.context.getString(R.string.absent_full_name)
+            else -> itemView.context.getString(R.string.full_name, surname, name, patronymic ?: "")
         }
     }
 
@@ -65,7 +78,7 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
             val vb = ListItemChannelBinding.inflate(layoutInflater, parent, false)
             return ChannelViewHolder(vb).apply {
                 itemView.setOnClickListener {
-                    listener.onChannelClick(bindingAdapterPosition, chat.userPhone)
+                    listener.onChannelClick(bindingAdapterPosition, fullName)
                 }
             }
         }

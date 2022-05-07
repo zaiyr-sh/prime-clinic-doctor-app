@@ -1,9 +1,5 @@
 package kg.iaau.diploma.primeclinicdoctor.repository
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import kg.iaau.diploma.core.utils.convertToEmail
 import kg.iaau.diploma.data.AccessToken
 import kg.iaau.diploma.data.Authorization
 import kg.iaau.diploma.local_storage.prefs.StoragePreferences
@@ -53,61 +49,6 @@ class AuthRepository(
 
     private fun savePhone(phone: String) {
         prefs.phone = phone
-    }
-
-    fun createNewUserInFirebase(mAuth: FirebaseAuth) {
-        val email = prefs.phone?.convertToEmail() ?: ""
-        mAuth.createUserWithEmailAndPassword(email, prefs.phone ?: "").addOnCompleteListener {
-            when (it.isSuccessful) {
-                true -> setupOnlineUser()
-                false -> {
-                    FirebaseAuth.getInstance().signInWithEmailAndPassword(email, prefs.phone ?: "")
-                        .addOnCompleteListener { t ->
-                            if (t.isSuccessful) setupUser()
-                        }
-                }
-            }
-        }
-    }
-
-    private fun setupOnlineUser() {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            val db = FirebaseFirestore.getInstance()
-            val map = mutableMapOf<String, Any>()
-            map["userType"] = "USER"
-            map["userPhone"] = prefs.phone ?: ""
-            map["isOnline"] = true
-            db.collection("users").document(prefs.userId.toString()).set(map, SetOptions.merge())
-        }
-    }
-
-    private fun setupUser() {
-        val user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            val db = FirebaseFirestore.getInstance()
-            val map = mutableMapOf<String, String>()
-            map["userType"] = "USER"
-            map["userPhone"] = prefs.phone ?: ""
-            db.collection("users").document(prefs.userId.toString()).set(map)
-        }
-    }
-
-    fun signInFirebase() {
-        val email = prefs.phone?.convertToEmail() ?: ""
-        FirebaseAuth.getInstance().signInWithEmailAndPassword(email, prefs.phone ?: "")
-            .addOnCompleteListener {
-                when (it.isSuccessful) {
-                    true -> setupOnlineUser()
-                    else -> {
-                        FirebaseAuth.getInstance()
-                            .createUserWithEmailAndPassword(email, prefs.phone ?: "")
-                            .addOnCompleteListener { t ->
-                                if (t.isSuccessful) setupUser()
-                            }
-                    }
-                }
-            }
     }
 
 }

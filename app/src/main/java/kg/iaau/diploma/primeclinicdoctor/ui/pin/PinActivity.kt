@@ -112,7 +112,6 @@ class PinActivity : CoreActivity<ActivityPinBinding, AuthorizationVM>(Authorizat
     }
 
     private fun startMainActivity() {
-        vm.signInFirebase()
         MainActivity.startActivity(this)
         finish()
     }

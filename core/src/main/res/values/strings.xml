@@ -37,6 +37,7 @@
 
     <string name="administrator">Администратор</string>
     <string name="patient">Пациент</string>
+    <string name="absent_full_name">Имя не задано</string>
     <string name="your_message">Вы: %s</string>
     <string name="patient_message">Пациент: %s</string>
     <string name="admin_message">Админ: %s</string>

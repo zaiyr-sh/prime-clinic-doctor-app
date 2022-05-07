@@ -189,3 +189,5 @@ fun String.convertBase64ToDrawable(context: Context, @DrawableRes defaultResId: 
         }
     }
 }
+
+fun String?.isFullyEmpty() = isNullOrEmpty() || isNullOrBlank()
