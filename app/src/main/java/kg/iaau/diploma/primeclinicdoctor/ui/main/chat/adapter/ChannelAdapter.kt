@@ -29,8 +29,10 @@ class ChannelAdapter(options: FirestoreRecyclerOptions<Chat>, private var listen
 class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.ViewHolder(vb.root) {
 
     private var fullName: String = ""
+    private var userPhone: String? = ""
 
     fun bind(chat: Chat) {
+        userPhone = chat.userPhone
         vb.run {
             setupChannelVisibility(chat)
             tvTime.text = chat.lastMessageTime?.toDate()?.formatForDate()
@@ -87,7 +89,7 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
             val vb = ListItemChannelBinding.inflate(layoutInflater, parent, false)
             return ChannelViewHolder(vb).apply {
                 itemView.setOnClickListener {
-                    listener.onChannelClick(bindingAdapterPosition, fullName)
+                    listener.onChannelClick(bindingAdapterPosition, userPhone, fullName)
                 }
             }
         }
@@ -95,5 +97,5 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
 }
 
 interface ChannelListener {
-    fun onChannelClick(position: Int, chatUserPhone: String?)
+    fun onChannelClick(position: Int, phone: String?, fullName: String?)
 }

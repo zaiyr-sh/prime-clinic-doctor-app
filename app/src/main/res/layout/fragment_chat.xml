@@ -23,6 +23,7 @@
             app:menu="@menu/chat_menu"
             app:navigationIcon="@drawable/ic_arrow_back"
             app:title="@string/administrator"
+            app:subtitle="@string/absent_phone_number"
             app:titleMarginStart="@dimen/size_16dp"
             app:titleTextAppearance="@style/ToolbarTheme">
 

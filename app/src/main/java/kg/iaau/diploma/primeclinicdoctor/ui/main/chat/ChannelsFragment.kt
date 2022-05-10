@@ -56,18 +56,24 @@ class ChannelsFragment : CoreFragment<FragmentChannelsBinding, ChatVM>(ChatVM::c
             }
             LoadingScreen.hideLoading()
             clAdminChat.setOnClickListener {
-                navigateToChat(doc.reference.path, UserType.ADMIN.name, getString(R.string.administrator))
+                navigateToChat(
+                    doc.reference.path,
+                    UserType.ADMIN.name,
+                    null,
+                    getString(R.string.administrator)
+                )
             }
         }
     }
 
-    private fun navigateToChat(path: String, type: String, userName: String?) {
+    private fun navigateToChat(path: String, type: String, phone: String?, fullName: String?) {
         findNavController().navigate(
             R.id.nav_chat,
             Bundle().apply {
                 putString("path", path)
                 putString("type", type)
-                putString("username", userName)
+                putString("phone", phone ?: getString(R.string.absent_phone_number))
+                putString("username", fullName)
             }
         )
     }
@@ -79,9 +85,9 @@ class ChannelsFragment : CoreFragment<FragmentChannelsBinding, ChatVM>(ChatVM::c
         adapter.startListening()
     }
 
-    override fun onChannelClick(position: Int, chatUserPhone: String?) {
+    override fun onChannelClick(position: Int, phone: String?, fullName: String?) {
         val ref = adapter.snapshots.getSnapshot(position).reference.path
-        navigateToChat(ref, UserType.PATIENT.name, chatUserPhone)
+        navigateToChat(ref, UserType.PATIENT.name, phone, fullName)
     }
 
 }

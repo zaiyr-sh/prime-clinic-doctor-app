@@ -43,6 +43,9 @@
             android:name="type"
             app:argType="string" />
         <argument
+            android:name="phone"
+            app:argType="string" />
+        <argument
             android:name="username"
             app:argType="string" />
         <action

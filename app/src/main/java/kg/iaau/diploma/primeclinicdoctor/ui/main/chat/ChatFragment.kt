@@ -38,6 +38,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
     private val args: ChatFragmentArgs by navArgs()
     private val ref by lazy { args.path }
     private val userType by lazy { args.type }
+    private val phone by lazy { args.phone }
     private val username by lazy { args.username }
 
     private var docRef: DocumentReference? = null
@@ -110,12 +111,19 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
             listener = { id ->
                 userId = id
                 when (userType) {
-                    UserType.PATIENT.name ->  vb.toolbar.title = username
+                    UserType.PATIENT.name -> setUserData()
                     UserType.ADMIN.name -> setHasOptionsMenu(false)
                 }
                 setupChatMessages()
             }
         )
+    }
+
+    private fun setUserData() {
+        vb.toolbar.run {
+            title = username
+            subtitle = phone
+        }
     }
 
     private fun sendMessage(image: String? = null) {

@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_video_chat.xml" value="0.11828774062816616" />
         <entry key="app/src/main/res/layout/fragment_channels.xml" value="0.15715579710144928" />
-        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_chat.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_clients_reserved.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_image_full.xml" value="0.16168478260869565" />
         <entry key="app/src/main/res/layout/fragment_med_cards.xml" value="0.161231884057971" />
@@ -21,7 +21,7 @@
         <entry key="app/src/main/res/layout/list_item_channel.xml" value="0.335" />
         <entry key="app/src/main/res/layout/list_item_client.xml" value="0.375" />
         <entry key="app/src/main/res/layout/list_item_med_card.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/list_item_received_message.xml" value="0.14447463768115942" />
+        <entry key="app/src/main/res/layout/list_item_received_message.xml" value="0.335" />
         <entry key="app/src/main/res/layout/list_item_sent_message.xml" value="0.4525660964230171" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/chat_menu.xml" value="0.24322916666666666" />

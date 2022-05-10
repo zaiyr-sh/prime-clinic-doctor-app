@@ -48,7 +48,6 @@ class AuthorizationActivity :
 
     override fun successAction() {
         super.successAction()
-        initFirebaseAuth()
         PinActivity.startActivity(this)
         finish()
     }
