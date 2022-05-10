@@ -46,11 +46,11 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
     }
 
     private fun setupChannelVisibility(chat: Chat) {
-        val chatStartedDate = chat.chatStartedTime?.toDate()
+        val chatStartedDate = chat.chatTime?.toDate()
         val currentDate = Date()
         when(chatStartedDate == null) {
             true -> vb.clContainer.setVisible(false)
-            else -> vb.clContainer.setVisible(currentDate.remainFromInDays(chatStartedDate) <= 1)
+            else -> vb.clContainer.setVisible(currentDate.remainFromInDays(chatStartedDate) == 0L)
         }
     }
 
