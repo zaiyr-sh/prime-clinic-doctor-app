@@ -40,6 +40,7 @@
     <string name="patient">Пациент</string>
     <string name="phone_number_format">+996 700 111 222</string>
     <string name="absent_full_name">Имя не задано</string>
+    <string name="chat_not_available">Чат недоступен!</string>
     <string name="absent_phone_number">Номер телефона не указан</string>
     <string name="your_message">Вы: %s</string>
     <string name="patient_message">Пациент: %s</string>

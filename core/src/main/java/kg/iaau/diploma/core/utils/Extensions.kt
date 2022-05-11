@@ -15,6 +15,7 @@ import android.util.Base64
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.annotation.StringRes
@@ -206,4 +207,8 @@ fun Date.remainFromInDays(date2: Date): Long {
     val hours = minutes / 60
     val days = hours / 24
     return days
+}
+
+fun Context.setColor(@ColorRes resId: Int): Int {
+    return ContextCompat.getColor(this, resId)
 }

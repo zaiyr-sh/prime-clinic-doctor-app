@@ -34,7 +34,6 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
     fun bind(chat: Chat) {
         userPhone = chat.userPhone
         vb.run {
-            setupChannelVisibility(chat)
             tvTime.text = chat.lastMessageTime?.toDate()?.formatForDate()
             tvMessage.text = when (chat.lastMessageSenderId) {
                 chat.clientId -> itemView.context.getString(R.string.patient_message, getMessage(chat))
@@ -42,15 +41,29 @@ class ChannelViewHolder(private val vb: ListItemChannelBinding) : RecyclerView.V
                 else -> ""
             }
             setupUser(chat.clientId)
+            setupChannelEnabling(chat)
         }
     }
 
-    private fun setupChannelVisibility(chat: Chat) {
+    private fun setupChannelEnabling(chat: Chat) {
         val chatStartedDate = chat.chatTime?.toDate()
         val currentDate = Date()
         when(chatStartedDate == null) {
-            true -> vb.clContainer.setVisible(false)
-            else -> vb.clContainer.setVisible(currentDate.remainFromInDays(chatStartedDate) == 0L)
+            true -> setChatEnabled(false)
+            else -> setChatEnabled(currentDate.remainFromInDays(chatStartedDate) == 0L)
+        }
+    }
+
+    private fun setChatEnabled(isEnabled: Boolean) {
+        vb.run {
+            when (isEnabled) {
+                true -> clContainer.setEnable(true)
+                false -> {
+                    tvMessage.text = itemView.context.getString(R.string.chat_not_available)
+                    tvMessage.setTextColor(itemView.context.setColor(R.color.red))
+                    clContainer.setEnable(false)
+                }
+            }
         }
     }
 
