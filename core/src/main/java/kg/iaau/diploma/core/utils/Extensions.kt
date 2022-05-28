@@ -183,8 +183,9 @@ fun ImageView.loadBase64Image(context: Context, image: String?, @DrawableRes def
         setImageDrawable(image.convertBase64ToDrawable(context, defaultResId))
 }
 
-fun String.convertBase64ToBitmap(): Bitmap {
+fun String.convertBase64ToBitmap(): Bitmap? {
     val imageAsBytes = Base64.decode(toByteArray(), Base64.DEFAULT)
+    if (imageAsBytes.isEmpty()) return null
     return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.size)
 }
 

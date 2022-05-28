@@ -153,11 +153,11 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
     }
 
     companion object {
-        private const val API_KEY = "47483661"
+        private const val API_KEY = "47510191"
         private var SESSION_ID =
-            "1_MX40NzQ4MzY2MX5-MTY0OTg2OTY0MzU3Nn55TVFDVmhpZHVvMGg1TnRpY0VHdEV4TTR-fg"
+            "1_MX40NzUxMDE5MX5-MTY1MzczODk1ODUzMH5EZnVMYTRTMmRxaFVJNGVsNVkycmY2bjh-fg"
         private var TOKEN =
-            "T1==cGFydG5lcl9pZD00NzQ4MzY2MSZzaWc9NmUxNWY3MjM2NTQ4YzM0YzlkM2Y2NTUyN2M0MzE1M2RhNDgyMjAwOTpzZXNzaW9uX2lkPTFfTVg0ME56UTRNelkyTVg1LU1UWTBPVGcyT1RZME16VTNObjU1VFZGRFZtaHBaSFZ2TUdnMVRuUnBZMFZIZEVWNFRUUi1mZyZjcmVhdGVfdGltZT0xNjQ5ODY5Njk0Jm5vbmNlPTAuMTY2OTU1ODYxOTAzMzY5MDgmcm9sZT1wdWJsaXNoZXImZXhwaXJlX3RpbWU9MTY1MjQ2MTY5MyZpbml0aWFsX2xheW91dF9jbGFzc19saXN0PQ=="
+            "T1==cGFydG5lcl9pZD00NzUxMDE5MSZzaWc9NWMzZDg4ZTBkODFlYjhmOTQzMGMyZWUwNjk4ZTdmZGE4NmMyZmZiYjpzZXNzaW9uX2lkPTFfTVg0ME56VXhNREU1TVg1LU1UWTFNemN6T0RrMU9EVXpNSDVFWm5WTVlUUlRNbVJ4YUZWSk5HVnNOVmt5Y21ZMmJqaC1mZyZjcmVhdGVfdGltZT0xNjUzNzM4OTk1Jm5vbmNlPTAuOTYxNTM1ODQxNDgwMTMzOCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjUzNzYwNTk0JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
 
         private val permissions = arrayOf(
             Manifest.permission.RECORD_AUDIO,
