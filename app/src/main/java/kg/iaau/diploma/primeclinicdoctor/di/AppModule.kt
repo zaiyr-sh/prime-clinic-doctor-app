@@ -37,22 +37,18 @@ object AppModule {
     }
 
     @Provides
-    @Singleton
     fun provideScheduleDao(db: AppDatabase) = db.scheduleDao()
 
     @Singleton
     @Provides
     fun providesStoragePreferences(@ApplicationContext context: Context) = StoragePreferences(context)
 
-    @Singleton
     @Provides
     fun providesAuthRepository(storagePreferences: StoragePreferences, apiAuth: ApiAuth) = AuthRepository(storagePreferences, apiAuth)
 
-    @Singleton
     @Provides
     fun providesScheduleRepository(storagePreferences: StoragePreferences, apiSchedule: ApiSchedule, scheduleDao: ScheduleDao) = ScheduleRepository(storagePreferences, apiSchedule, scheduleDao)
 
-    @Singleton
     @Provides
     fun providesMedCardsRepository(apiMedCard: ApiMedCard) = MedCardsRepository(apiMedCard)
 
