@@ -28,7 +28,7 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
 
     private lateinit var vb: ActivityVideoChatBinding
 
-    private lateinit var mp: MediaPlayer
+    private var mp: MediaPlayer? = null
 
     private val refPath by lazy { intent.getStringExtra(REF)!! }
     private val username by lazy { intent.getStringExtra(USERNAME)!! }
@@ -50,8 +50,8 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
 
     private fun playConnectingSound() {
         mp = MediaPlayer.create(this, R.raw.connecting)
-        mp.isLooping = true
-        mp.start()
+        mp?.isLooping = true
+        mp?.start()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,11 +108,11 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
             (mPublisher?.view as GLSurfaceView).setZOrderOnTop(true)
         }
         mSession.publish(mPublisher)
-        mp.stop()
+        mp?.stop()
     }
 
     override fun onDisconnected(p0: Session?) {
-        mp.stop()
+        mp?.stop()
         Log.d("VideoChatActivity", "onDisconnected(): ")
     }
 
@@ -161,11 +161,9 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
         private var TOKEN =
             "T1==cGFydG5lcl9pZD00NzUxMDE5MSZzaWc9YjAxMDcxODE4ZTM1M2IxZTg0MzdjNDUxMTNlMGNjZGMzZTBhYWFkYTpzZXNzaW9uX2lkPTJfTVg0ME56VXhNREU1TVg1LU1UWTFORFF3TlRFNE5UVTVPWDVKYW00MFVXOXVSa3RGWVhobE5qSTFiRlJEVkVJME4xcC1mZyZjcmVhdGVfdGltZT0xNjU0NDA1MjM2Jm5vbmNlPTAuOTAwMDM4MzE5Njc3NTAxNyZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjU2OTk3MjM1JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
 
-        @RequiresApi(Build.VERSION_CODES.S)
         private val permissions = arrayOf(
             Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.CAMERA,
-            Manifest.permission.BLUETOOTH_CONNECT
+            Manifest.permission.CAMERA
         )
 
         private const val REF = "ref"

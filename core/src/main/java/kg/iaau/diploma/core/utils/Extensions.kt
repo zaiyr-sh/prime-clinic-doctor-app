@@ -213,3 +213,10 @@ fun Date.remainFromInDays(date2: Date): Long {
 fun Context.setColor(@ColorRes resId: Int): Int {
     return ContextCompat.getColor(this, resId)
 }
+
+fun View.setOnSingleClickListener(onClick: (View) -> Unit) {
+    val safeClickListener = SingleClickListener {
+        onClick(it)
+    }
+    setOnClickListener(safeClickListener)
+}

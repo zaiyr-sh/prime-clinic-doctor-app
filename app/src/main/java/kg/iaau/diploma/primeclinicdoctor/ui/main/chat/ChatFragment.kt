@@ -91,7 +91,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
             rlAttachImage.setOnClickListener {
                 requestPickImagePermission.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
-            ivSentMessage.setOnClickListener {
+            ivSentMessage.setOnSingleClickListener {
                 if (messageType == MessageType.TEXT.type)
                     sendMessage()
                 else

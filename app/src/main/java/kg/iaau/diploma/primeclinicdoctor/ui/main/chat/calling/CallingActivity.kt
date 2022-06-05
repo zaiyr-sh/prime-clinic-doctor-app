@@ -8,10 +8,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.ui.CoreActivity
-import kg.iaau.diploma.core.utils.FirebaseHelper
-import kg.iaau.diploma.core.utils.loadBase64Image
-import kg.iaau.diploma.core.utils.startActivity
-import kg.iaau.diploma.core.utils.toast
+import kg.iaau.diploma.core.utils.*
 import kg.iaau.diploma.primeclinicdoctor.R
 import kg.iaau.diploma.primeclinicdoctor.databinding.ActivityCallingBinding
 import kg.iaau.diploma.primeclinicdoctor.ui.main.chat.ChatVM
@@ -67,7 +64,7 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
     }
 
     private fun setEndCall() {
-        vb.givCancel.setOnClickListener {
+        vb.givCancel.setOnSingleClickListener {
             endCall()
         }
     }
