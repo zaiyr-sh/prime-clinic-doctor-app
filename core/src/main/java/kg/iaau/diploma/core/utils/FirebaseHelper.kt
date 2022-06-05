@@ -62,11 +62,11 @@ object FirebaseHelper {
 
     fun setupPatientData(
         userId: String?,
-        doctorChatListener: ((doc: DocumentSnapshot) -> Unit)?
+        patientChatListener: ((doc: DocumentSnapshot) -> Unit)?
     ) {
         val db = FirebaseFirestore.getInstance()
-        db.collection("users").document(userId!!).get().addOnSuccessListener {
-            doctorChatListener?.invoke(it)
+        db.collection("users").document(userId ?: "").get().addOnSuccessListener {
+            patientChatListener?.invoke(it)
         }
     }
 

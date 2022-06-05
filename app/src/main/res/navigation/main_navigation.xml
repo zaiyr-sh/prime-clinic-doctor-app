@@ -42,12 +42,6 @@
         <argument
             android:name="type"
             app:argType="string" />
-        <argument
-            android:name="phone"
-            app:argType="string" />
-        <argument
-            android:name="username"
-            app:argType="string" />
         <action
             android:id="@+id/from_nav_chat_to_nav_image_full"
             app:destination="@id/nav_image_full" />

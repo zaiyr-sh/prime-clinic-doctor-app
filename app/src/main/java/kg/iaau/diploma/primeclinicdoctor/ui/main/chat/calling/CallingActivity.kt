@@ -9,6 +9,7 @@ import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kg.iaau.diploma.core.ui.CoreActivity
 import kg.iaau.diploma.core.utils.FirebaseHelper
+import kg.iaau.diploma.core.utils.loadBase64Image
 import kg.iaau.diploma.core.utils.startActivity
 import kg.iaau.diploma.core.utils.toast
 import kg.iaau.diploma.primeclinicdoctor.R
@@ -31,7 +32,11 @@ class CallingActivity : CoreActivity<ActivityCallingBinding, ChatVM>(ChatVM::cla
         playPhoneBeepSound()
         vb.run {
             FirebaseHelper.setupPatientData(userId) {
-                tvUsername.text = it.getString("userPhone")
+                val image = it.getString("image")
+                val name = it.getString("name")
+                val surname = it.getString("surname")
+                ivUser.loadBase64Image(this@CallingActivity, image, R.drawable.ic_patient)
+                tvUsername.text = getString(R.string.name_with_patronymic, name, surname)
             }
         }
         makePhoneCall()

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,8 +39,6 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
     private val args: ChatFragmentArgs by navArgs()
     private val ref by lazy { args.path }
     private val userType by lazy { args.type }
-    private val phone by lazy { args.phone }
-    private val username by lazy { args.username }
 
     private var docRef: DocumentReference? = null
     private lateinit var db: FirebaseFirestore
@@ -111,18 +110,29 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
             listener = { id ->
                 userId = id
                 when (userType) {
-                    UserType.PATIENT.name -> setUserData()
-                    UserType.ADMIN.name -> setHasOptionsMenu(false)
+                    UserType.PATIENT.name -> FirebaseHelper.setupPatientData(
+                        id,
+                        patientChatListener = { doc: DocumentSnapshot ->  setupUserChat(doc) }
+                    )
+                    UserType.ADMIN.name -> {
+                        setHasOptionsMenu(false)
+                        setupChatMessages()
+                    }
                 }
-                setupChatMessages()
             }
         )
     }
 
-    private fun setUserData() {
-        vb.toolbar.run {
-            title = username
-            subtitle = phone
+    private fun setupUserChat(doc: DocumentSnapshot) {
+        vb.run {
+            val image = doc.getString("image")
+            val name = doc.getString("name")
+            val surname = doc.getString("surname")
+            val userPhone = doc.getString("userPhone")
+            toolbarLogo.loadBase64Image(requireContext(), image, R.drawable.ic_patient)
+            toolbar.title = getString(R.string.name_with_patronymic, name, surname)
+            toolbar.subtitle = userPhone
+            setupChatMessages()
         }
     }
 

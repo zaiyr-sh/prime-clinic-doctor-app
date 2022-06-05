@@ -59,21 +59,17 @@ class ChannelsFragment : CoreFragment<FragmentChannelsBinding, ChatVM>(ChatVM::c
                 navigateToChat(
                     doc.reference.path,
                     UserType.ADMIN.name,
-                    null,
-                    getString(R.string.administrator)
                 )
             }
         }
     }
 
-    private fun navigateToChat(path: String, type: String, phone: String?, fullName: String?) {
+    private fun navigateToChat(path: String, type: String) {
         findNavController().navigate(
             R.id.nav_chat,
             Bundle().apply {
                 putString("path", path)
                 putString("type", type)
-                putString("phone", phone ?: getString(R.string.absent_phone_number))
-                putString("username", fullName)
             }
         )
     }
@@ -85,9 +81,9 @@ class ChannelsFragment : CoreFragment<FragmentChannelsBinding, ChatVM>(ChatVM::c
         adapter.startListening()
     }
 
-    override fun onChannelClick(position: Int, phone: String?, fullName: String?) {
+    override fun onChannelClick(position: Int) {
         val ref = adapter.snapshots.getSnapshot(position).reference.path
-        navigateToChat(ref, UserType.PATIENT.name, phone, fullName)
+        navigateToChat(ref, UserType.PATIENT.name)
     }
 
 }

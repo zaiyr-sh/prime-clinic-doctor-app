@@ -5,9 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -155,13 +157,15 @@ class VideoChatActivity : AppCompatActivity(), Session.SessionListener,
     companion object {
         private const val API_KEY = "47510191"
         private var SESSION_ID =
-            "1_MX40NzUxMDE5MX5-MTY1MzczODk1ODUzMH5EZnVMYTRTMmRxaFVJNGVsNVkycmY2bjh-fg"
+            "2_MX40NzUxMDE5MX5-MTY1NDQwNTE4NTU5OX5Jam40UW9uRktFYXhlNjI1bFRDVEI0N1p-fg"
         private var TOKEN =
-            "T1==cGFydG5lcl9pZD00NzUxMDE5MSZzaWc9NWMzZDg4ZTBkODFlYjhmOTQzMGMyZWUwNjk4ZTdmZGE4NmMyZmZiYjpzZXNzaW9uX2lkPTFfTVg0ME56VXhNREU1TVg1LU1UWTFNemN6T0RrMU9EVXpNSDVFWm5WTVlUUlRNbVJ4YUZWSk5HVnNOVmt5Y21ZMmJqaC1mZyZjcmVhdGVfdGltZT0xNjUzNzM4OTk1Jm5vbmNlPTAuOTYxNTM1ODQxNDgwMTMzOCZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjUzNzYwNTk0JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
+            "T1==cGFydG5lcl9pZD00NzUxMDE5MSZzaWc9YjAxMDcxODE4ZTM1M2IxZTg0MzdjNDUxMTNlMGNjZGMzZTBhYWFkYTpzZXNzaW9uX2lkPTJfTVg0ME56VXhNREU1TVg1LU1UWTFORFF3TlRFNE5UVTVPWDVKYW00MFVXOXVSa3RGWVhobE5qSTFiRlJEVkVJME4xcC1mZyZjcmVhdGVfdGltZT0xNjU0NDA1MjM2Jm5vbmNlPTAuOTAwMDM4MzE5Njc3NTAxNyZyb2xlPXB1Ymxpc2hlciZleHBpcmVfdGltZT0xNjU2OTk3MjM1JmluaXRpYWxfbGF5b3V0X2NsYXNzX2xpc3Q9"
 
+        @RequiresApi(Build.VERSION_CODES.S)
         private val permissions = arrayOf(
             Manifest.permission.RECORD_AUDIO,
-            Manifest.permission.CAMERA
+            Manifest.permission.CAMERA,
+            Manifest.permission.BLUETOOTH_CONNECT
         )
 
         private const val REF = "ref"
