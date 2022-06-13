@@ -71,15 +71,17 @@ object FirebaseHelper {
     }
 
     inline fun <reified T> setupChat(
-        docRef: DocumentReference,
+        docRef: DocumentReference?,
         crossinline onSuccess: ((options: FirestoreRecyclerOptions<T>) -> Unit)
     ) {
-        val query = docRef.collection("messages").orderBy("time", Query.Direction.ASCENDING)
-        val options: FirestoreRecyclerOptions<T> =
-            FirestoreRecyclerOptions.Builder<T>().setQuery(query, T::class.java)
-                .build()
-        docRef.collection("messages").addSnapshotListener { _, _ ->
-            onSuccess(options)
+        val query = docRef?.collection("messages")?.orderBy("time", Query.Direction.ASCENDING)
+        val options: FirestoreRecyclerOptions<T>? =
+            query?.let {
+                FirestoreRecyclerOptions.Builder<T>().setQuery(it, T::class.java)
+                    .build()
+            }
+        docRef?.collection("messages")?.addSnapshotListener { _, _ ->
+            options?.let { onSuccess(it) }
         }
     }
 

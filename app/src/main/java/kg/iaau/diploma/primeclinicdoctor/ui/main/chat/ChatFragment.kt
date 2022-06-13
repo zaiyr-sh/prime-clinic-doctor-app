@@ -117,6 +117,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                     UserType.ADMIN.name -> {
                         setHasOptionsMenu(false)
                         setupChatMessages()
+                        vb.toolbarLogo.setImageDrawable(requireContext().setDrawable(R.drawable.ic_admin))
                     }
                 }
             }
@@ -189,7 +190,7 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                     rvChats.scrollToPosition(positionStart)
                 }
             }
-            FirebaseHelper.setupChat<Message>(docRef!!) { options ->
+            FirebaseHelper.setupChat<Message>(docRef) { options ->
                 adapter = MessageAdapter(options, this@ChatFragment)
                 rvChats.adapter = adapter
                 adapter.startListening()
