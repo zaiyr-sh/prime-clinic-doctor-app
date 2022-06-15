@@ -125,15 +125,17 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
     }
 
     private fun setupUserChat(doc: DocumentSnapshot) {
-        vb.run {
-            val image = doc.getString("image")
-            val name = doc.getString("name")
-            val surname = doc.getString("surname")
-            val userPhone = doc.getString("userPhone")
-            toolbarLogo.loadBase64Image(requireContext(), image, R.drawable.ic_patient)
-            toolbar.title = getString(R.string.name_with_patronymic, name, surname)
-            toolbar.subtitle = userPhone
-            setupChatMessages()
+        docRef?.let {
+            vb.run {
+                val image = doc.getString("image")
+                val name = doc.getString("name")
+                val surname = doc.getString("surname")
+                val userPhone = doc.getString("userPhone")
+                toolbarLogo.loadBase64Image(requireContext(), image, R.drawable.ic_patient)
+                toolbar.title = getString(R.string.name_with_patronymic, name, surname)
+                toolbar.subtitle = userPhone
+                setupChatMessages()
+            }
         }
     }
 
@@ -191,12 +193,13 @@ class ChatFragment : CoreFragment<FragmentChatBinding, ChatVM>(ChatVM::class.jav
                 }
             }
             FirebaseHelper.setupChat<Message>(docRef) { options ->
-                adapter = MessageAdapter(options, this@ChatFragment)
-                rvChats.adapter = adapter
-                adapter.startListening()
-                adapter.registerAdapterDataObserver(observer)
-                goneLoader()
-                requireActivity().toast(getString(R.string.chat_started))
+                docRef?.let {
+                    adapter = MessageAdapter(options, this@ChatFragment)
+                    rvChats.adapter = adapter
+                    adapter.startListening()
+                    adapter.registerAdapterDataObserver(observer)
+                    goneLoader()
+                }
             }
             rvChats.scrollToLastItem()
         }
